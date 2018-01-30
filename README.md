@@ -3,6 +3,7 @@ Basic environment for games, coded in C
 # *(careful : comments are in french !)*
 
 *30/01/2018 - Added a pong to try my own medicine \o/*
+
 *29/01/2018 - Now working with rectangles \o/*
 
 What you need to use this ?
