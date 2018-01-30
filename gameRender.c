@@ -1,25 +1,42 @@
 #include "includes.h"
 
-void gameRender(SDL_Window *pWindow,SDL_Surface *pWindowSurf,anObject allObject[NB_MAX_OBJ]) {
-    /*SDL_Renderer *renderer = NULL;
-    renderer = SDL_CreateRenderer(pWindow,-1,0);
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-    SDL_RenderClear(renderer);
-    SDL_RenderPresent(renderer);
-    SDL_UpdateWindowSurface(pWindow);*/
+void gameRender(SDL_Window *pWindow,SDL_Surface *pWindowSurf,MasterObject *pMasterObject) {
 
+    //Screen erase (well, covers it in black...)
     SDL_FillRect(pWindowSurf,NULL,SDL_MapRGB(pWindowSurf->format,0,0,0));
-    //SDL_UpdateWindowSurface(pWindow);
 
-    int i;
-    SDL_Rect srcRect;
-    for (i=0;i<NB_MAX_OBJ;i++) {
-        srcRect.x = allObject[i].x;
-        srcRect.y = allObject[i].y;
-        srcRect.h = allObject[i].h;
-        srcRect.w = allObject[i].w;
-        SDL_FillRect(pWindowSurf,&srcRect,SDL_MapRGB(pWindowSurf->format,255,255,255));
-    }
+    //Calls render of structures
+    gameRenderAnim(pWindow,pWindowSurf,pMasterObject->allObjAnim);
+    gameRenderRect(pWindow,pWindowSurf,pMasterObject->allObjRect);
+
+    /* PROBLEM : Can't choose rendering order... (for example : here anim is first cause it's some kind of background) */
+    // SOLUTION ? Buffering all objects in smaller MasterObjects according to a "turn order" (member of structs, user defined).
 
     SDL_UpdateWindowSurface(pWindow);
+}
+
+
+void gameRenderRect(SDL_Window *pWindow,SDL_Surface *pWindowSurf,ObjRect allObjRect[OBJRECT_MAX]) {
+    int i;
+    SDL_Rect srcRect;
+    for (i=0;i<OBJRECT_MAX;i++) {
+        srcRect.x = allObjRect[i].x;
+        srcRect.y = allObjRect[i].y;
+        srcRect.h = allObjRect[i].h;
+        srcRect.w = allObjRect[i].w;
+        SDL_FillRect(pWindowSurf,&srcRect,SDL_MapRGB(pWindowSurf->format,255,255,255));
+    }
+}
+
+
+void gameRenderAnim(SDL_Window *pWindow,SDL_Surface *pWindowSurf,ObjAnim allObjAnim[OBJANIM_MAX]) {
+    int i;
+    SDL_Rect srcRect;
+    for (i=0;i<OBJANIM_MAX;i++) {
+        srcRect.x = allObjAnim[i].x;
+        srcRect.y = allObjAnim[i].y;
+        srcRect.h = allObjAnim[i].h;
+        srcRect.w = allObjAnim[i].w;
+        SDL_FillRect(pWindowSurf,&srcRect,SDL_MapRGB(pWindowSurf->format,50,50,50));
+    }
 }

@@ -10,18 +10,30 @@
 #define UPDATE_TIMER 4 //Met les données à jour tous les XX ms (attention à mettre un timer d'update strictement inférieur au timer du render !)
 #define RENDER_TIMER 16 //Affiche les objets tous les XX ms (16ms = 60FPS environ)
 
-//Enums
-enum {
-    PAD_LEFT,
-    PAD_RIGHT,
-    BALL,
+//Enums - Makes it easier to know what object you're working on.
+enum eObjRect {
+    OBJRECT_PAD_LEFT,
+    OBJRECT_PAD_RIGHT,
+    OBJRECT_BALL,
 
-    NB_MAX_OBJ
+    /* ADD NEW RECTANGLE OBJECTS HERE */
+
+    OBJRECT_MAX
+};
+
+enum eObjAnim {
+    OBJANIM_BACKGROUND,
+
+    /* ADD NEW ANIMATED OBJECTS HERE */
+
+    OBJANIM_MAX
 };
 
 //TypeDef
 typedef struct Keyboard Keyboard;
-typedef struct anObject anObject;
+typedef struct ObjRect ObjRect;
+typedef struct ObjAnim ObjAnim;
+typedef struct MasterObject MasterObject;
 
 
 #endif // DEFINES_H_INCLUDED

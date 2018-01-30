@@ -3,7 +3,14 @@
 
 #include "defines.h"
 
-void gameUpdate(Uint32 deltatime,Keyboard *pKEYBOARD,anObject allObject[NB_MAX_OBJ]);
-int isColliding(anObject allObject[NB_MAX_OBJ], int a, int b);
+//Main update, calls others updates
+void gameUpdate(Uint32 deltatime,Keyboard *pKEYBOARD,MasterObject *pMasterObject);
+
+//Specific functions
+void gameUpdateRect(Uint32 deltatime,Keyboard *pKEYBOARD,ObjRect allObjRect[OBJRECT_MAX]);
+void gameUpdateAnim(Uint32 deltatime,Keyboard *pKEYBOARD,ObjAnim allObjAnim[OBJANIM_MAX]);
+
+//Regular functions
+int isColliding(ObjRect allObjRect[OBJRECT_MAX], int a, int b);
 
 #endif // GAMEUPDATE_H_INCLUDED

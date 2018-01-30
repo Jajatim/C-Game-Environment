@@ -22,9 +22,10 @@ int main(int argc, char** argv)
     //Récup surface fenetre
     SDL_Surface *pWindowSurf = fNewWindowSurface(pWindow,pWindowSurf,tpSurf);
 
-    //Tableau des objets
-    anObject allObjects[NB_MAX_OBJ];
-    initObject(allObjects);
+    //On crée la structure master (qui contient un tableau de chaque structure)
+    MasterObject aMasterObject;
+    MasterObject *pMasterObject = &aMasterObject;
+    initMaster(pMasterObject);
 
     //Déclaration des timers
     Uint32 renderTimer=RENDER_TIMER;
@@ -32,7 +33,7 @@ int main(int argc, char** argv)
 
 
     //Début du jeu
-    gameInit(allObjects);
+    gameInit(pMasterObject);
 
     //Boucle de jeu
     while(!exitRequest) {
@@ -47,7 +48,7 @@ int main(int argc, char** argv)
         //UPDATE
         updateTimer += deltaTime;
         if (updateTimer>=UPDATE_TIMER) {
-            gameUpdate(updateTimer,pKEYBOARD,allObjects);
+            gameUpdate(updateTimer,pKEYBOARD,pMasterObject);
             updateTimer=0;
         }
 
@@ -55,7 +56,7 @@ int main(int argc, char** argv)
         //RENDER
         renderTimer += deltaTime;
         if (renderTimer>=RENDER_TIMER) {
-            gameRender(pWindow,pWindowSurf,allObjects);
+            gameRender(pWindow,pWindowSurf,pMasterObject);
             renderTimer=0;
         }
         SDL_Delay(1); // OR -> //_sleep(1);

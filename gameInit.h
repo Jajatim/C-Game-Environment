@@ -3,6 +3,9 @@
 
 #include "defines.h"
 
-void gameInit(anObject allObject[NB_MAX_OBJ]);
+void gameInit(MasterObject *pMasterObject);
+
+void gameInitRect(ObjRect allObjRect[OBJRECT_MAX]);
+void gameInitAnim(ObjAnim allObjAnim[OBJANIM_MAX]);
 
 #endif // GAMEINIT_H_INCLUDED

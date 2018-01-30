@@ -17,12 +17,27 @@ struct Keyboard {
     //A compléter. Les modifications doivent être rajoutées dans le fichier event.c pour être prises en compte.
 };
 
-struct anObject {
+struct ObjRect {
     float x; //position en x
     float y; //position en y
     float w; //taille en largeur (si cercle : rayon)
     float h; //taille en hauteur
     float speed; //vitesse (en pixels par secondes)
+};
+
+struct ObjAnim {
+    float x; //position en x
+    float y; //position en y
+    float w; //taille en largeur (si cercle : rayon)
+    float h; //taille en hauteur
+    float speed; //vitesse (en pixels par secondes)
+
+    //same as ObjRect for testing purposes
+};
+
+struct MasterObject {
+    ObjRect allObjRect[OBJRECT_MAX];
+    ObjAnim allObjAnim[OBJANIM_MAX];
 };
 
 /*struct anObject {

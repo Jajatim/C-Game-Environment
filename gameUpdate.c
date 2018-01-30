@@ -1,108 +1,122 @@
 #include "includes.h"
 
-void gameUpdate(Uint32 deltatime,Keyboard *pKEYBOARD,anObject allObject[NB_MAX_OBJ]) {
-
-    //0 : pad gauche
-    //1 : pad droite
-    //2 : Balle
-
-
-    //0 : pad gauche
-    if (pKEYBOARD->Keyz==1) {
-        allObject[PAD_LEFT].y -= allObject[PAD_LEFT].speed*deltatime/1000;
-    }
-    /*if (pKEYBOARD->Keyq==1) {
-        allObject[PAD_LEFT].x -= allObject[PAD_LEFT].speed*deltatime/1000;
-    }*/
-    if (pKEYBOARD->Keys==1) {
-        allObject[PAD_LEFT].y += allObject[PAD_LEFT].speed*deltatime/1000;
-    }
-    /*if (pKEYBOARD->Keyd==1) {
-        allObject[PAD_LEFT].x += allObject[PAD_LEFT].speed*deltatime/1000;
-    }*/
-
-
-    //1 : pad droite
-    if (pKEYBOARD->ArrowUp==1) {
-        allObject[PAD_RIGHT].y -= allObject[PAD_RIGHT].speed*deltatime/1000;
-    }
-    /*if (pKEYBOARD->ArrowLeft==1) {
-        allObject[PAD_RIGHT].x -= allObject[PAD_RIGHT].speed*deltatime/1000;
-    }*/
-    if (pKEYBOARD->ArrowDown==1) {
-        allObject[PAD_RIGHT].y += allObject[PAD_RIGHT].speed*deltatime/1000;
-    }
-    /*if (pKEYBOARD->ArrowRight==1) {
-        allObject[PAD_RIGHT].x += allObject[PAD_RIGHT].speed*deltatime/1000;
-    }*/
-
-
-    //2 : Balle
-    static float dirX=1; //Coefficient de déplacement X, ici la balle va uniquement à droite sur l'axe X
-    static float dirY=0; //Coefficient de déplacement Y, ici la balle va tout droit sur l'axe Y
-    //La somme des valeurs absolues de X et Y doit toujours être égale à 1.
-
-    //Collision plafond
-    if (allObject[BALL].y<0) {
-        dirY *= -1;
-        allObject[BALL].y=1;
-    }
-
-    //Collision plancher
-    if (allObject[BALL].y+allObject[BALL].h>WINDOW_Y) {
-        dirY *= -1;
-        allObject[BALL].y=WINDOW_Y-allObject[BALL].h-1;
-    }
-
-    //Verif collision à gauche (on vérifie cette condition quand la balle est à 50pixels du pad)
-    if (allObject[BALL].x<allObject[PAD_LEFT].x+50 && isColliding(allObject,2,0)==1) {
-        //S'il y a collision, on vérifie compare les Y de la balle et du pad pour calculer l'angle de rebond
-        dirY = ((allObject[BALL].y + (allObject[BALL].h/2)) - allObject[PAD_LEFT].y) / allObject[PAD_LEFT].h;
-        dirY -= 0.5;
-
-        if (dirY<0) dirX = 1+dirY;
-        else dirX = 1-dirY;
-
-        printf("dir X : %f / dir Y : %f\n",dirX,dirY);
-    }
-
-    //Verif collision à droite (on vérifie cette condition quand la balle est à 50pixels du pad)
-    if (allObject[BALL].x>allObject[PAD_RIGHT].x-50 && isColliding(allObject,2,1)==1) {
-        //S'il y a collision, on vérifie compare les Y de la balle et du pad pour calculer l'angle de rebond
-        dirY = ((allObject[BALL].y + (allObject[BALL].h/2)) - allObject[PAD_RIGHT].y) / allObject[PAD_RIGHT].h;
-        dirY -= 0.5;
-
-        if (dirY<0) dirX = 1+dirY;
-        else dirX = 1-dirY;
-
-        dirX *= -1;
-
-        printf("dir X : %f / dir Y : %f\n",dirX,dirY);
-    }
-
-    allObject[BALL].x += allObject[BALL].speed*deltatime/1000 * dirX;
-    allObject[BALL].y += allObject[BALL].speed*deltatime/1000 * dirY;
-
-    if (pKEYBOARD->Space==1) {
-        gameInit(allObject);
-        dirX=1;
-        dirY=0;
-    }
+void gameUpdate(Uint32 deltatime,Keyboard *pKEYBOARD,MasterObject *pMasterObject) {
+    gameUpdateRect(deltatime,pKEYBOARD,pMasterObject->allObjRect);
+    gameUpdateAnim(deltatime,pKEYBOARD,pMasterObject->allObjAnim);
 }
 
 
-int isColliding(anObject allObject[NB_MAX_OBJ], int a, int b) {
+void gameUpdateRect(Uint32 deltatime,Keyboard *pKEYBOARD,ObjRect allObjRect[OBJRECT_MAX]) {
+
+    //TEMP - INITIALIZE AGAIN WHEN BALL IS OUTSIDE THE SCREEN
+    if (allObjRect[OBJRECT_BALL].x<0 || allObjRect[OBJRECT_BALL].x>WINDOW_X) {
+        gameInitRect(allObjRect);
+    }
+
+
+    // -- See enum in defines.h --
+    //0 : left pad
+    //1 : right pad
+    //2 : ball
+
+
+    //0 : left pad
+    if (pKEYBOARD->Keyz==1) {
+        allObjRect[OBJRECT_PAD_LEFT].y -= allObjRect[OBJRECT_PAD_LEFT].speed*deltatime/1000;
+    }
+    /*if (pKEYBOARD->Keyq==1) {
+        allObjRect[OBJRECT_PAD_LEFT].x -= allObjRect[OBJRECT_PAD_LEFT].speed*deltatime/1000;
+    }*/
+    if (pKEYBOARD->Keys==1) {
+        allObjRect[OBJRECT_PAD_LEFT].y += allObjRect[OBJRECT_PAD_LEFT].speed*deltatime/1000;
+    }
+    /*if (pKEYBOARD->Keyd==1) {
+        allObjRect[OBJRECT_PAD_LEFT].x += allObjRect[OBJRECT_PAD_LEFT].speed*deltatime/1000;
+    }*/
+
+
+    //1 : right pad
+    if (pKEYBOARD->ArrowUp==1) {
+        allObjRect[OBJRECT_PAD_RIGHT].y -= allObjRect[OBJRECT_PAD_RIGHT].speed*deltatime/1000;
+    }
+    /*if (pKEYBOARD->ArrowLeft==1) {
+        allObjRect[OBJRECT_PAD_RIGHT].x -= allObjRect[OBJRECT_PAD_RIGHT].speed*deltatime/1000;
+    }*/
+    if (pKEYBOARD->ArrowDown==1) {
+        allObjRect[OBJRECT_PAD_RIGHT].y += allObjRect[OBJRECT_PAD_RIGHT].speed*deltatime/1000;
+    }
+    /*if (pKEYBOARD->ArrowRight==1) {
+        allObjRect[OBJRECT_PAD_RIGHT].x += allObjRect[OBJRECT_PAD_RIGHT].speed*deltatime/1000;
+    }*/
+
+
+    //2 : ball
+    static float dirX=1; //X axis coefficient, here the ball goes straight on the X axis
+    static float dirY=0; //Y axis coefficient, here the ball goes straight on the X axis
+    //Note : Abolute values of x and y must add to make 1 in all cases (so the ball have a constant speed)
+
+    //Collision ceiling
+    if (allObjRect[OBJRECT_BALL].y<0) {
+        dirY *= -1;
+        allObjRect[OBJRECT_BALL].y=1;
+    }
+
+    //Collision floor
+    if (allObjRect[OBJRECT_BALL].y+allObjRect[OBJRECT_BALL].h>WINDOW_Y) {
+        dirY *= -1;
+        allObjRect[OBJRECT_BALL].y=WINDOW_Y-allObjRect[OBJRECT_BALL].h-1;
+    }
+
+    //Check collision on the left pad (check starts 50px away from the pad)
+    if (allObjRect[OBJRECT_BALL].x<allObjRect[OBJRECT_PAD_LEFT].x+50 && isColliding(allObjRect,2,0)==1) {
+
+        //We check where the ball hits the pad (from 0 (top) to 1 (bottom)), we substract 0.5 so the ball will rebound accordingly
+        dirY = ((allObjRect[OBJRECT_BALL].y + (allObjRect[OBJRECT_BALL].h/2)) - allObjRect[OBJRECT_PAD_LEFT].y) / allObjRect[OBJRECT_PAD_LEFT].h;
+        dirY -= 0.5;
+
+        //We recalculate X axis coefficient, who depends on Y axis coefficient so we stay at the same speed
+        if (dirY<0) dirX = 1+dirY;
+        else dirX = 1-dirY;
+    }
+
+    //Check collision on the right pad (check starts 50px away from the pad)
+    if (allObjRect[OBJRECT_BALL].x>allObjRect[OBJRECT_PAD_RIGHT].x-50 && isColliding(allObjRect,2,1)==1) {
+
+        //We check where the ball hits the pad (from 0 (top) to 1 (bottom)), we substract 0.5 so the ball will rebound accordingly
+        dirY = ((allObjRect[OBJRECT_BALL].y + (allObjRect[OBJRECT_BALL].h/2)) - allObjRect[OBJRECT_PAD_RIGHT].y) / allObjRect[OBJRECT_PAD_RIGHT].h;
+        dirY -= 0.5;
+
+        //We recalculate X axis coefficient, who depends on Y axis coefficient so we stay at the same speed
+        if (dirY<0) dirX = 1+dirY;
+        else dirX = 1-dirY;
+
+        //As we're recalculating the X axis coefficient, here we make the ball go left
+        dirX *= -1;
+    }
+
+    //We move the ball, accordingly to the calculated coefficients and the speed
+    allObjRect[OBJRECT_BALL].x += allObjRect[OBJRECT_BALL].speed*deltatime/1000 * dirX;
+    allObjRect[OBJRECT_BALL].y += allObjRect[OBJRECT_BALL].speed*deltatime/1000 * dirY;
+}
+
+
+void gameUpdateAnim(Uint32 deltatime,Keyboard *pKEYBOARD,ObjAnim allObjAnim[OBJANIM_MAX]) {
+    //No update to do yet
+}
+
+
+int isColliding(ObjRect allObjRect[OBJRECT_MAX], int a, int b) {
     //Pas de collision en haut ?
-    if (allObject[a].x>allObject[b].x+allObject[b].w) return 0;
+    if (allObjRect[a].x>allObjRect[b].x+allObjRect[b].w) return 0;
 
     //Pas de collision en bas ?
-    if (allObject[a].x+allObject[a].w<allObject[b].x) return 0;
+    if (allObjRect[a].x+allObjRect[a].w<allObjRect[b].x) return 0;
 
     //Pas de collision à gauche ?
-    if (allObject[a].y>allObject[b].y+allObject[b].h) return 0;
+    if (allObjRect[a].y>allObjRect[b].y+allObjRect[b].h) return 0;
 
     //Pas de collision à droite ?
-    if (allObject[a].y+allObject[a].h<allObject[b].y) return 0;
+    if (allObjRect[a].y+allObjRect[a].h<allObjRect[b].y) return 0;
 
     return 1;
 }
