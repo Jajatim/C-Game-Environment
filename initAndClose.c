@@ -1,10 +1,8 @@
 #include "includes.h"
 
-SDL_Window *pWindowAdrGeneral = NULL;
-
 //Initialisation simple
 void fInitSDL() {
-    if (SDL_Init(SDL_INIT_VIDEO) != 0 ) {
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0 ) {
         fprintf(stdout,"Échec de l'initialisation de la SDL (%s)\n",SDL_GetError());
         system("pause");
         exit(EXIT_FAILURE);
@@ -21,8 +19,6 @@ SDL_Window* fInitWindow(SDL_Window *pWindowAdr, const char windowName[50], int x
         system("pause");
         exit(EXIT_FAILURE);
     }
-
-    pWindowAdrGeneral = pWindowAdr;
 
     return pWindowAdr;
 }
@@ -57,9 +53,6 @@ SDL_Surface* fNewBMPSurface(SDL_Surface *pSurfAdr, const char *filePath, SDL_Sur
         system("pause");
         exit(EXIT_FAILURE);
     }
-
-    //SDL_ConvertSurface
-
     addSurfToDelTable(pSurfAdr,tpSurf);
 
     return pSurfAdr;

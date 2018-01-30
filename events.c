@@ -28,6 +28,18 @@ int fEventManager(Keyboard *pKEYBOARD) {
             case SDLK_SPACE:
                 pKEYBOARD->Space=1;
                 break;
+            case SDLK_z:
+                pKEYBOARD->Keyz=1;
+                break;
+            case SDLK_q:
+                pKEYBOARD->Keyq=1;
+                break;
+            case SDLK_s:
+                pKEYBOARD->Keys=1;
+                break;
+            case SDLK_d:
+                pKEYBOARD->Keyd=1;
+                break;
         }
     }
     else if (pEvent->type == SDL_KEYUP) {
@@ -46,6 +58,18 @@ int fEventManager(Keyboard *pKEYBOARD) {
                 break;
             case SDLK_SPACE:
                 pKEYBOARD->Space=0;
+                break;
+            case SDLK_z:
+                pKEYBOARD->Keyz=0;
+                break;
+            case SDLK_q:
+                pKEYBOARD->Keyq=0;
+                break;
+            case SDLK_s:
+                pKEYBOARD->Keys=0;
+                break;
+            case SDLK_d:
+                pKEYBOARD->Keyd=0;
                 break;
         }
     }

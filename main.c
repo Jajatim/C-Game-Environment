@@ -29,6 +29,7 @@ int main(int argc, char** argv)
     gameInit(allObjects);
 
     Uint32 renderTimer=0;
+    Uint32 updateTimer=0;
 
     //Boucle de jeu infinie
     while(!exitRequest) {
@@ -41,12 +42,16 @@ int main(int argc, char** argv)
 
 
         //UPDATE
-        gameUpdate(deltaTime,pKEYBOARD,allObjects);
+        updateTimer += deltaTime;
+        if (updateTimer>=RENDER_TIMER) {
+            gameUpdate(updateTimer,pKEYBOARD,allObjects);
+            updateTimer=0;
+        }
 
 
         //RENDER
         renderTimer += deltaTime;
-        if (renderTimer>=16) {
+        if (renderTimer>=RENDER_TIMER) {
             gameRender(pWindow,pWindowSurf,allObjects);
             renderTimer=0;
         }

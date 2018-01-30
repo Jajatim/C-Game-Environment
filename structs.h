@@ -9,16 +9,20 @@ struct Keyboard {
     int ArrowLeft;
     int ArrowRight;
     int Space;
+    int Keyz;
+    int Keyq;
+    int Keys;
+    int Keyd;
 
     //A compléter. Les modifications doivent être rajoutées dans le fichier event.c pour être prises en compte.
 };
 
 struct anObject {
-    int x; //position en x
-    int y; //position en y
-    int w; //taille en largeur (si cercle : rayon)
-    int h; //taille en hauteur
-    int speed; //vitesse (en pixels par secondes)
+    float x; //position en x
+    float y; //position en y
+    float w; //taille en largeur (si cercle : rayon)
+    float h; //taille en hauteur
+    float speed; //vitesse (en pixels par secondes)
 };
 
 /*struct anObject {

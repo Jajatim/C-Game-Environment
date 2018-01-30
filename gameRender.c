@@ -18,7 +18,7 @@ void gameRender(SDL_Window *pWindow,SDL_Surface *pWindowSurf,anObject allObject[
         srcRect.y = allObject[i].y;
         srcRect.h = allObject[i].h;
         srcRect.w = allObject[i].w;
-        SDL_FillRect(pWindowSurf,&srcRect,SDL_MapRGB(pWindowSurf->format,255,0,0));
+        SDL_FillRect(pWindowSurf,&srcRect,SDL_MapRGB(pWindowSurf->format,255,255,255));
     }
 
     SDL_UpdateWindowSurface(pWindow);

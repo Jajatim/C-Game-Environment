@@ -3,11 +3,11 @@
 void initObject(anObject allObject[NB_MAX_OBJ]) {
     int i;
     for (i=0;i<NB_MAX_OBJ;i++) {
-        allObject[i].x=0;
-        allObject[i].y=0;
-        allObject[i].w=0;
-        allObject[i].h=0;
-        allObject[i].speed=0;
+        allObject[i].x=0.0;
+        allObject[i].y=0.0;
+        allObject[i].w=0.0;
+        allObject[i].h=0.0;
+        allObject[i].speed=0.0;
     }
 }
 
