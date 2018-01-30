@@ -9,31 +9,31 @@ void gameUpdate(Uint32 deltatime,Keyboard *pKEYBOARD,anObject allObject[NB_MAX_O
 
     //0 : pad gauche
     if (pKEYBOARD->Keyz==1) {
-        allObject[0].y -= allObject[0].speed*deltatime/1000;
+        allObject[PAD_LEFT].y -= allObject[PAD_LEFT].speed*deltatime/1000;
     }
     /*if (pKEYBOARD->Keyq==1) {
-        allObject[0].x -= allObject[0].speed*deltatime/1000;
+        allObject[PAD_LEFT].x -= allObject[PAD_LEFT].speed*deltatime/1000;
     }*/
     if (pKEYBOARD->Keys==1) {
-        allObject[0].y += allObject[0].speed*deltatime/1000;
+        allObject[PAD_LEFT].y += allObject[PAD_LEFT].speed*deltatime/1000;
     }
     /*if (pKEYBOARD->Keyd==1) {
-        allObject[0].x += allObject[0].speed*deltatime/1000;
+        allObject[PAD_LEFT].x += allObject[PAD_LEFT].speed*deltatime/1000;
     }*/
 
 
     //1 : pad droite
     if (pKEYBOARD->ArrowUp==1) {
-        allObject[1].y -= allObject[1].speed*deltatime/1000;
+        allObject[PAD_RIGHT].y -= allObject[PAD_RIGHT].speed*deltatime/1000;
     }
     /*if (pKEYBOARD->ArrowLeft==1) {
-        allObject[1].x -= allObject[1].speed*deltatime/1000;
+        allObject[PAD_RIGHT].x -= allObject[PAD_RIGHT].speed*deltatime/1000;
     }*/
     if (pKEYBOARD->ArrowDown==1) {
-        allObject[1].y += allObject[1].speed*deltatime/1000;
+        allObject[PAD_RIGHT].y += allObject[PAD_RIGHT].speed*deltatime/1000;
     }
     /*if (pKEYBOARD->ArrowRight==1) {
-        allObject[1].x += allObject[1].speed*deltatime/1000;
+        allObject[PAD_RIGHT].x += allObject[PAD_RIGHT].speed*deltatime/1000;
     }*/
 
 
@@ -43,21 +43,21 @@ void gameUpdate(Uint32 deltatime,Keyboard *pKEYBOARD,anObject allObject[NB_MAX_O
     //La somme des valeurs absolues de X et Y doit toujours être égale à 1.
 
     //Collision plafond
-    if (allObject[2].y<0) {
+    if (allObject[BALL].y<0) {
         dirY *= -1;
-        allObject[2].y=1;
+        allObject[BALL].y=1;
     }
 
     //Collision plancher
-    if (allObject[2].y+allObject[2].h>WINDOW_Y) {
+    if (allObject[BALL].y+allObject[BALL].h>WINDOW_Y) {
         dirY *= -1;
-        allObject[2].y=WINDOW_Y-allObject[2].h-1;
+        allObject[BALL].y=WINDOW_Y-allObject[BALL].h-1;
     }
 
     //Verif collision à gauche (on vérifie cette condition quand la balle est à 50pixels du pad)
-    if (allObject[2].x<allObject[0].x+50 && isColliding(allObject,2,0)==1) {
+    if (allObject[BALL].x<allObject[PAD_LEFT].x+50 && isColliding(allObject,2,0)==1) {
         //S'il y a collision, on vérifie compare les Y de la balle et du pad pour calculer l'angle de rebond
-        dirY = ((allObject[2].y + (allObject[2].h/2)) - allObject[0].y) / allObject[0].h;
+        dirY = ((allObject[BALL].y + (allObject[BALL].h/2)) - allObject[PAD_LEFT].y) / allObject[PAD_LEFT].h;
         dirY -= 0.5;
 
         if (dirY<0) dirX = 1+dirY;
@@ -67,9 +67,9 @@ void gameUpdate(Uint32 deltatime,Keyboard *pKEYBOARD,anObject allObject[NB_MAX_O
     }
 
     //Verif collision à droite (on vérifie cette condition quand la balle est à 50pixels du pad)
-    if (allObject[2].x>allObject[1].x-50 && isColliding(allObject,2,1)==1) {
+    if (allObject[BALL].x>allObject[PAD_RIGHT].x-50 && isColliding(allObject,2,1)==1) {
         //S'il y a collision, on vérifie compare les Y de la balle et du pad pour calculer l'angle de rebond
-        dirY = ((allObject[2].y + (allObject[2].h/2)) - allObject[1].y) / allObject[1].h;
+        dirY = ((allObject[BALL].y + (allObject[BALL].h/2)) - allObject[PAD_RIGHT].y) / allObject[PAD_RIGHT].h;
         dirY -= 0.5;
 
         if (dirY<0) dirX = 1+dirY;
@@ -80,8 +80,8 @@ void gameUpdate(Uint32 deltatime,Keyboard *pKEYBOARD,anObject allObject[NB_MAX_O
         printf("dir X : %f / dir Y : %f\n",dirX,dirY);
     }
 
-    allObject[2].x += allObject[2].speed*deltatime/1000 * dirX;
-    allObject[2].y += allObject[2].speed*deltatime/1000 * dirY;
+    allObject[BALL].x += allObject[BALL].speed*deltatime/1000 * dirX;
+    allObject[BALL].y += allObject[BALL].speed*deltatime/1000 * dirY;
 
     if (pKEYBOARD->Space==1) {
         gameInit(allObject);

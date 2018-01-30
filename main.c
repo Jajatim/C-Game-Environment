@@ -26,12 +26,15 @@ int main(int argc, char** argv)
     anObject allObjects[NB_MAX_OBJ];
     initObject(allObjects);
 
+    //Déclaration des timers
+    Uint32 renderTimer=RENDER_TIMER;
+    Uint32 updateTimer=UPDATE_TIMER;
+
+
+    //Début du jeu
     gameInit(allObjects);
 
-    Uint32 renderTimer=0;
-    Uint32 updateTimer=0;
-
-    //Boucle de jeu infinie
+    //Boucle de jeu
     while(!exitRequest) {
         //GESTION TEMPS
         deltaTime = fTimer();
@@ -43,7 +46,7 @@ int main(int argc, char** argv)
 
         //UPDATE
         updateTimer += deltaTime;
-        if (updateTimer>=RENDER_TIMER) {
+        if (updateTimer>=UPDATE_TIMER) {
             gameUpdate(updateTimer,pKEYBOARD,allObjects);
             updateTimer=0;
         }
@@ -55,7 +58,6 @@ int main(int argc, char** argv)
             gameRender(pWindow,pWindowSurf,allObjects);
             renderTimer=0;
         }
-        //SDL_UpdateWindowSurface(pWindow);
         SDL_Delay(1); // OR -> //_sleep(1);
     }
 

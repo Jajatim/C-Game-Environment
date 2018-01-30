@@ -2,31 +2,28 @@
 
 void gameInit(anObject allObject[NB_MAX_OBJ]) {
 
-    //0 : pad gauche
-    //1 : pad droite
-    //2 : Balle
-
+    //Voir l'enumeration dans "defines.h" pour voir les correspondances
 
     //0 : pad gauche
-    allObject[0].x = 20;
-    allObject[0].y = WINDOW_Y/2-100/2;
-    allObject[0].w = 20;
-    allObject[0].h = 100;
-    allObject[0].speed = 300;
+    allObject[PAD_LEFT].x = 20;
+    allObject[PAD_LEFT].y = WINDOW_Y/2-100/2;
+    allObject[PAD_LEFT].w = 20;
+    allObject[PAD_LEFT].h = 100;
+    allObject[PAD_LEFT].speed = 300;
 
     //1 : pad droite
-    allObject[1].x = WINDOW_X-20;
-    allObject[1].y = WINDOW_Y/2-100/2;
-    allObject[1].w = 20;
-    allObject[1].h = 100;
-    allObject[1].speed = 300;
+    allObject[PAD_RIGHT].x = WINDOW_X-20-20;
+    allObject[PAD_RIGHT].y = WINDOW_Y/2-100/2;
+    allObject[PAD_RIGHT].w = 20;
+    allObject[PAD_RIGHT].h = 100;
+    allObject[PAD_RIGHT].speed = 300;
 
     //2 : Balle
-    allObject[2].x = WINDOW_X/2-20/2;
-    allObject[2].y = WINDOW_Y/2-20/2;
-    allObject[2].w = 20;
-    allObject[2].h = 20;
-    allObject[2].speed = 750;
+    allObject[BALL].x = WINDOW_X/2-20/2;
+    allObject[BALL].y = WINDOW_Y/2-20/2;
+    allObject[BALL].w = 20;
+    allObject[BALL].h = 20;
+    allObject[BALL].speed = 750;
 
     /*//3 : Score Joueur Gauche
     allObject[0].x = 100;
