@@ -1,25 +1,28 @@
 #include "includes.h"
 
+//Note for build warnings, the pointers are initialized in the creating functions. You can safely ignore theses errors.
 
 int main(int argc, char** argv)
 {
-    //Init de la SDL
+    //PART 1 - BASIC INITIALIZATION
+    //SDL Initialization
     fInitSDL();
 
-    //Création fenetre
-    SDL_Window *pWindow = NULL;
-    pWindow = fInitWindow(pWindow,"DAT GAME OMG",SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,WINDOW_X,WINDOW_Y,SDL_WINDOW_SHOWN);
+    //Main window creation
+    SDL_Window *pWindow = fInitWindow(pWindow,"DAT GAME OMG",SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,WINDOW_X,WINDOW_Y,SDL_WINDOW_SHOWN);
 
-    //déclarations variables générales
-    SDL_Surface* tpSurf[NB_MAX_SURF] = {NULL}; //tableau des pointeurs sur surfaces
-    int exitRequest = 0; //Pour quitter la boucle du jeu (quitte tout !)
-    Uint32 deltaTime = 0.0; //Gestion du timer
 
-    //On crée la structure du clavier et son pointeur
+    //PART 2 - GENERAL PURPOSE VARIABLES
+    //general variables
+    SDL_Surface* tpSurf[NB_MAX_SURF] = {NULL}; //surface's pointers table. Used to free everyone at once when exiting.
+    int exitRequest = 0; //To break from the game loop
+    Uint32 deltaTime = 0.0; //for timer handling
+
+    //Creating the keyboard map
     Keyboard KEYBOARD = {0};
     Keyboard *pKEYBOARD = &KEYBOARD;
 
-    //Récup surface fenetre
+    //Creating the window surface
     SDL_Surface *pWindowSurf = fNewWindowSurface(pWindow,pWindowSurf,tpSurf);
 
     //On crée la structure master (qui contient un tableau de chaque structure)
@@ -27,25 +30,26 @@ int main(int argc, char** argv)
     MasterObject *pMasterObject = &aMasterObject;
     initMaster(pMasterObject);
 
-    //Déclaration des timers
+    //Creating the timers
     Uint32 renderTimer=RENDER_TIMER;
     Uint32 updateTimer=UPDATE_TIMER;
 
 
-    //Début du jeu
+    //PART 3 - GAME INDEED
+    //Game starts
     gameInit(pMasterObject);
 
-    //Boucle de jeu
+    //Here comes the game loop
     while(!exitRequest) {
-        //GESTION TEMPS
+        //TIME HANDLING
         deltaTime = fTimer();
 
 
-        //EVENT
+        //EVENT HANDLING
         exitRequest = fEventManager(pKEYBOARD);
 
 
-        //UPDATE
+        //UPDATE HANDLING
         updateTimer += deltaTime;
         if (updateTimer>=UPDATE_TIMER) {
             gameUpdate(updateTimer,pKEYBOARD,pMasterObject);
@@ -53,7 +57,7 @@ int main(int argc, char** argv)
         }
 
 
-        //RENDER
+        //RENDER HANDLING
         renderTimer += deltaTime;
         if (renderTimer>=RENDER_TIMER) {
             gameRender(pWindow,pWindowSurf,pMasterObject);
@@ -62,13 +66,15 @@ int main(int argc, char** argv)
         SDL_Delay(1); // OR -> //_sleep(1);
     }
 
-    //Free all surfaces
+
+    //PART 4 - WE ALL GOT TO DIE SOMEDAY
+    //Free all created surfaces
     fFreeAllSurfaces(tpSurf);
 
-    //Destruction fenetre
+    //Destroying the window
     fDestroyWindow(pWindow);
 
-    //Fermeture SDL
+    //Uninitializing SDL
     fQuit();
 
     return EXIT_SUCCESS;

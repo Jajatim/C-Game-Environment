@@ -1,16 +1,16 @@
 #include "includes.h"
 
-//int fEventManager(Keyboard *pKEYBOARD, SDL_Event *pEvent) {
 int fEventManager(Keyboard *pKEYBOARD) {
 
-    //On crée un event (et son pointeur pour éviter la copie) pour ne pas le recréer à chaque fois
+    //We need an event (the pointer is quite useless, but meh...)
     SDL_Event event;
     SDL_Event *pEvent = &event;
 
     SDL_PollEvent(pEvent);
 
-    if ((*pEvent).type == SDL_QUIT) return 1;
+    if ((*pEvent).type == SDL_QUIT) return 1; //Returns true to the "exitGame" variable
 
+    //Updates keyboard when pressing a key
     if (pEvent->type == SDL_KEYDOWN) {
         switch(pEvent->key.keysym.sym) {
             case SDLK_UP:
@@ -42,6 +42,7 @@ int fEventManager(Keyboard *pKEYBOARD) {
                 break;
         }
     }
+    //Updates keyboard when releasing a key
     else if (pEvent->type == SDL_KEYUP) {
         switch(pEvent->key.keysym.sym) {
             case SDLK_UP:
@@ -74,5 +75,5 @@ int fEventManager(Keyboard *pKEYBOARD) {
         }
     }
 
-    return 0;
+    return 0; //Returns false to the "exitGame" variable
 }

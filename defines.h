@@ -2,15 +2,15 @@
 #define DEFINES_H_INCLUDED
 
 
-//Defines
-#define WINDOW_X 640 //Taille de l'écran en largeur
-#define WINDOW_Y 480 //Taille de l'écran en longueur
-#define NB_MAX_SURF 10 //Nombre de surfaces maximum dans tout le programme (utilisé pour faire des free automatiquement)
-//#define NB_MAX_OBJ 5 //Nombre maximum d'objets de jeu - déprécié, remplacé par la valeur finale de l'enumeration ci dessous.
-#define UPDATE_TIMER 4 //Met les données à jour tous les XX ms (attention à mettre un timer d'update strictement inférieur au timer du render !)
-#define RENDER_TIMER 16 //Affiche les objets tous les XX ms (16ms = 60FPS environ)
+//DEFINES
+#define WINDOW_X 640 //Screen width (in pixels)
+#define WINDOW_Y 480 //Screnn height (in pixels)
+#define NB_MAX_SURF 10 //Used to stored the maximum number of surfaces used in the software, so we can free them all at once when exiting.
+//#define NB_MAX_OBJ 5 //Maximum game objects - DEPRECATED ! Now the maximum game objects is defined in the enumerations below, one enumeration for each object type.
+#define UPDATE_TIMER 4 //Updates data every XX ms (Careful ! Keep this quite low or your render function will render useless garbage !)
+#define RENDER_TIMER 16 //Render every object every XX ms (16ms = 60FPS)
 
-//Enums - Makes it easier to know what object you're working on.
+//ENUMERATIONS - Makes it easier to know what object you're working on, and keeps track of the table size needed to store them.
 enum eObjRect {
     OBJRECT_PAD_LEFT,
     OBJRECT_PAD_RIGHT,
@@ -18,7 +18,7 @@ enum eObjRect {
 
     /* ADD NEW RECTANGLE OBJECTS HERE */
 
-    OBJRECT_MAX
+    OBJRECT_MAX //Enumeration ending, used as the table size to store them all
 };
 
 enum eObjAnim {
@@ -26,10 +26,13 @@ enum eObjAnim {
 
     /* ADD NEW ANIMATED OBJECTS HERE */
 
-    OBJANIM_MAX
+    OBJANIM_MAX //Enumeration ending, used as the table size to store them all
 };
 
-//TypeDef
+/* If you need a new object type, create its enumeration here */
+
+
+//TYPEDEFS
 typedef struct Keyboard Keyboard;
 typedef struct ObjRect ObjRect;
 typedef struct ObjAnim ObjAnim;

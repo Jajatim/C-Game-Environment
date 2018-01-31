@@ -6,7 +6,7 @@
 //Main update, calls others updates
 void gameUpdate(Uint32 deltatime,Keyboard *pKEYBOARD,MasterObject *pMasterObject);
 
-//Specific functions
+//Sub updates
 void gameUpdateRect(Uint32 deltatime,Keyboard *pKEYBOARD,ObjRect allObjRect[OBJRECT_MAX]);
 void gameUpdateAnim(Uint32 deltatime,Keyboard *pKEYBOARD,ObjAnim allObjAnim[OBJANIM_MAX]);
 

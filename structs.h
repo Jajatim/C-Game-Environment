@@ -14,25 +14,25 @@ struct Keyboard {
     int Keys;
     int Keyd;
 
-    //A compléter. Les modifications doivent être rajoutées dans le fichier event.c pour être prises en compte.
+    //Keyboard mapping, feel free to add any key but make sure to add it in event.c as well (so it can be used)
 };
 
 struct ObjRect {
-    float x; //position en x
-    float y; //position en y
-    float w; //taille en largeur (si cercle : rayon)
-    float h; //taille en hauteur
-    float speed; //vitesse (en pixels par secondes)
+    float x; //x pos
+    float y; //y pos
+    float w; //width
+    float h; //height
+    float speed; //speed (in pixels per second)
 };
 
 struct ObjAnim {
-    float x; //position en x
-    float y; //position en y
-    float w; //taille en largeur (si cercle : rayon)
-    float h; //taille en hauteur
-    float speed; //vitesse (en pixels par secondes)
+    float x; //x pos
+    float y; //y pos
+    float w; //width
+    float h; //height
+    float speed; //speed (in pixels per second)
 
-    //same as ObjRect for testing purposes
+    //NOTE : same as ObjRect for testing purposes
 };
 
 struct MasterObject {
@@ -40,6 +40,8 @@ struct MasterObject {
     ObjAnim allObjAnim[OBJANIM_MAX];
 };
 
+
+//NOTE : below are ideas for an animated object. Unused for now.
 /*struct anObject {
     //Elements de gestion macro
     int isDead; //0 ou 1 - Raccourci pour savoir si on le traite ou pas du tout

@@ -1,16 +1,26 @@
 #include "includes.h"
 
+
+// NEED REWORK TO WORK WITH RENDERERS !
+
 void gameRender(SDL_Window *pWindow,SDL_Surface *pWindowSurf,MasterObject *pMasterObject) {
 
     //Screen erase (well, covers it in black...)
     SDL_FillRect(pWindowSurf,NULL,SDL_MapRGB(pWindowSurf->format,0,0,0));
 
-    //Calls render of structures
+    //Calls sub renders
     gameRenderAnim(pWindow,pWindowSurf,pMasterObject->allObjAnim);
     gameRenderRect(pWindow,pWindowSurf,pMasterObject->allObjRect);
 
-    /* PROBLEM : Can't choose rendering order... (for example : here anim is first cause it's some kind of background) */
-    // SOLUTION ? Buffering all objects in smaller MasterObjects according to a "turn order" (member of structs, user defined).
+    /*
+    PROBLEM : Can't choose rendering order...
+        -> for example : here anim is called first cause it's some kind of background, if called second we wouldn't see the pads and the ball
+
+    SOLUTION 1 : "Buffering" all objects in smaller MasterObjects according to a "turn order" (member of structs, user defined) maybe?
+        -> Sounds slow but might work.
+    SOLUTION 2 : Creating objects and members in the right order maybe ?.
+        -> Sounds like lots of work for starters, and awful maintenance. We wouldn't be able to have exceptions as well...
+    */
 
     SDL_UpdateWindowSurface(pWindow);
 }

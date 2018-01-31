@@ -8,13 +8,14 @@ void gameUpdate(Uint32 deltatime,Keyboard *pKEYBOARD,MasterObject *pMasterObject
 
 void gameUpdateRect(Uint32 deltatime,Keyboard *pKEYBOARD,ObjRect allObjRect[OBJRECT_MAX]) {
 
-    //TEMP - INITIALIZE AGAIN WHEN BALL IS OUTSIDE THE SCREEN
+    //TEMP - INITIALIZE DATA WHEN BALL IS OUTSIDE THE SCREEN
     if (allObjRect[OBJRECT_BALL].x<0 || allObjRect[OBJRECT_BALL].x>WINDOW_X) {
         gameInitRect(allObjRect);
     }
+    //END TEMP
 
 
-    // -- See enum in defines.h --
+    // -- See enum in defines.h for details --
     //0 : left pad
     //1 : right pad
     //2 : ball
