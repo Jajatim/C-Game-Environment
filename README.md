@@ -1,6 +1,7 @@
 # C-Game-Environment
 Basic environment for games, coded in C
-# *(careful : comments are in french !)*
+
+*31/01/2018 - Now in english \o/*
 
 *30/01/2018 - Added a pong to try my own medicine \o/*
 
