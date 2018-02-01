@@ -1,7 +1,7 @@
 # C-Game-Environment
 Basic environment for games, coded in C
 
-*01/02/2018 - Big update \o/ (mainly : textures, mouse input and maintenance, see bottom of this readme for the list*
+*01/02/2018 - Big update \o/ (mainly : textures, mouse input and maintenance, see bottom of this readme for the list)*
 
 *31/01/2018 - Now in english \o/*
 
