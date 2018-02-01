@@ -1,12 +1,16 @@
 #include "includes.h"
 
-void gameUpdate(Uint32 deltatime,Keyboard *pKEYBOARD,MasterObject *pMasterObject) {
-    gameUpdateRect(deltatime,pKEYBOARD,pMasterObject->allObjRect);
-    gameUpdateAnim(deltatime,pKEYBOARD,pMasterObject->allObjAnim);
+void gameUpdate(Uint32 deltatime,Keyboard *pKeyboard,Mouse *pMouse,MasterObject *pMasterObject) {
+    //void gameUpdateBackground(); //Normally, doesn't need updating. Uncomment if needed
+    gameUpdateRect(deltatime,pKeyboard,pMouse,pMasterObject->allObjRect);
+    gameUpdateAnim(deltatime,pKeyboard,pMouse,pMasterObject->allObjAnim);
 }
 
 
-void gameUpdateRect(Uint32 deltatime,Keyboard *pKEYBOARD,ObjRect allObjRect[OBJRECT_MAX]) {
+//void gameUpdateBackground() //Normally, doesn't need updating. Uncomment if needed
+
+
+void gameUpdateRect(Uint32 deltatime,Keyboard *pKeyboard,Mouse *pMouse,ObjRect allObjRect[OBJRECT_MAX]) {
 
     //TEMP - INITIALIZE DATA WHEN BALL IS OUTSIDE THE SCREEN
     if (allObjRect[OBJRECT_BALL].x<0 || allObjRect[OBJRECT_BALL].x>WINDOW_X) {
@@ -21,35 +25,49 @@ void gameUpdateRect(Uint32 deltatime,Keyboard *pKEYBOARD,ObjRect allObjRect[OBJR
     //2 : ball
 
 
-    //0 : left pad
-    if (pKEYBOARD->Keyz==1) {
+    //0 : left pad (zqsd)
+    if (pKeyboard->Keyz==1) {
         allObjRect[OBJRECT_PAD_LEFT].y -= allObjRect[OBJRECT_PAD_LEFT].speed*deltatime/1000;
     }
-    /*if (pKEYBOARD->Keyq==1) {
+    if (pKeyboard->Keyq==1) {
         allObjRect[OBJRECT_PAD_LEFT].x -= allObjRect[OBJRECT_PAD_LEFT].speed*deltatime/1000;
-    }*/
-    if (pKEYBOARD->Keys==1) {
+    }
+    if (pKeyboard->Keys==1) {
         allObjRect[OBJRECT_PAD_LEFT].y += allObjRect[OBJRECT_PAD_LEFT].speed*deltatime/1000;
     }
-    /*if (pKEYBOARD->Keyd==1) {
+    if (pKeyboard->Keyd==1) {
         allObjRect[OBJRECT_PAD_LEFT].x += allObjRect[OBJRECT_PAD_LEFT].speed*deltatime/1000;
-    }*/
+    }
 
 
-    //1 : right pad
-    if (pKEYBOARD->ArrowUp==1) {
+    //1 : right pad (arrow keys)
+    if (pKeyboard->ArrowUp==1) {
         allObjRect[OBJRECT_PAD_RIGHT].y -= allObjRect[OBJRECT_PAD_RIGHT].speed*deltatime/1000;
     }
-    /*if (pKEYBOARD->ArrowLeft==1) {
+    if (pKeyboard->ArrowLeft==1) {
         allObjRect[OBJRECT_PAD_RIGHT].x -= allObjRect[OBJRECT_PAD_RIGHT].speed*deltatime/1000;
-    }*/
-    if (pKEYBOARD->ArrowDown==1) {
+    }
+    if (pKeyboard->ArrowDown==1) {
         allObjRect[OBJRECT_PAD_RIGHT].y += allObjRect[OBJRECT_PAD_RIGHT].speed*deltatime/1000;
     }
-    /*if (pKEYBOARD->ArrowRight==1) {
+    if (pKeyboard->ArrowRight==1) {
         allObjRect[OBJRECT_PAD_RIGHT].x += allObjRect[OBJRECT_PAD_RIGHT].speed*deltatime/1000;
-    }*/
+    }
 
+    /*
+    //1 : right pad bis (mouse) - It works \o/
+    if (pMouse->MouseX >= allObjRect[OBJRECT_PAD_RIGHT].x) {
+        allObjRect[OBJRECT_PAD_RIGHT].x += allObjRect[OBJRECT_PAD_RIGHT].speed*deltatime/1000;
+    }
+    else {
+        allObjRect[OBJRECT_PAD_RIGHT].x -= allObjRect[OBJRECT_PAD_RIGHT].speed*deltatime/1000;
+    }
+    if (pMouse->MouseY >= allObjRect[OBJRECT_PAD_RIGHT].y) {
+        allObjRect[OBJRECT_PAD_RIGHT].y += allObjRect[OBJRECT_PAD_RIGHT].speed*deltatime/1000;
+    }
+    else {
+        allObjRect[OBJRECT_PAD_RIGHT].y -= allObjRect[OBJRECT_PAD_RIGHT].speed*deltatime/1000;
+    }*/
 
     //2 : ball
     static float dirX=1; //X axis coefficient, here the ball goes straight on the X axis
@@ -101,8 +119,8 @@ void gameUpdateRect(Uint32 deltatime,Keyboard *pKEYBOARD,ObjRect allObjRect[OBJR
 }
 
 
-void gameUpdateAnim(Uint32 deltatime,Keyboard *pKEYBOARD,ObjAnim allObjAnim[OBJANIM_MAX]) {
-    //No update to do yet
+void gameUpdateAnim(Uint32 deltatime,Keyboard *pKeyboard,Mouse *pMouse,ObjAnim allObjAnim[OBJANIM_MAX]) {
+    //No update to do here yet
 }
 
 

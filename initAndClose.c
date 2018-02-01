@@ -3,25 +3,36 @@
 //Initialization SDL
 void fInitSDL() {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0 ) {
-        fprintf(stdout,"Échec de l'initialisation de la SDL (%s)\n",SDL_GetError());
+        fprintf(stdout,"SDL initialization failed. (%s)\n",SDL_GetError());
         system("pause");
         exit(EXIT_FAILURE);
     }
 }
 
-//Main window creation
-SDL_Window* fInitWindow(SDL_Window *pWindowAdr, const char windowName[50], int x, int y, int w, int h, Uint32 flags) {
-    pWindowAdr = NULL;
-    pWindowAdr = SDL_CreateWindow(windowName,x,y,w,h,flags);
 
-    if(pWindowAdr==NULL) {
-        fprintf(stderr,"Erreur de création de la fenêtre: %s\n",SDL_GetError());
+//Main window creation, and it's renderer
+Window* fInitWindow(Window *pWindowStruct, const char windowName[50], int x, int y, int w, int h, Uint32 flags) {
+    //Creating the window
+    pWindowStruct->pWindow = NULL;
+    pWindowStruct->pWindow = SDL_CreateWindow(windowName,x,y,w,h,flags);
+    if(pWindowStruct->pWindow==NULL) {
+        fprintf(stderr,"Couldn't create the window: %s\n",SDL_GetError());
         system("pause");
         exit(EXIT_FAILURE);
     }
 
-    return pWindowAdr;
+    //Creating the renderer
+    pWindowStruct->pRenderer = NULL;
+    pWindowStruct->pRenderer = SDL_CreateRenderer(pWindowStruct->pWindow, -1, SDL_RENDERER_ACCELERATED);
+    if(pWindowStruct->pRenderer==NULL) {
+        fprintf(stderr,"Couldn't create the renderer: %s\n",SDL_GetError());
+        system("pause");
+        exit(EXIT_FAILURE);
+    }
+
+    return pWindowStruct;
 }
+
 
 //Adding a surface pointer to the surface table. This table is used to free every surface when exiting application.
 void addSurfToDelTable(SDL_Surface *pSurfAdr, SDL_Surface* tpSurf[NB_MAX_SURF]) {
@@ -30,12 +41,13 @@ void addSurfToDelTable(SDL_Surface *pSurfAdr, SDL_Surface* tpSurf[NB_MAX_SURF]) 
     current_id++;
 }
 
+
 //Creating a window surface
 SDL_Surface* fNewWindowSurface(SDL_Window *pWindowAdr, SDL_Surface *pSurfAdr, SDL_Surface* tpSurf[NB_MAX_SURF]) {
     pSurfAdr = NULL;
     pSurfAdr = SDL_GetWindowSurface( pWindowAdr );
     if(pSurfAdr==NULL) {
-        fprintf(stderr,"Erreur de création de surface : %s\n",SDL_GetError());
+        fprintf(stderr,"Couldn't create the surface : %s\n",SDL_GetError());
         system("pause");
         exit(EXIT_FAILURE);
     }
@@ -44,18 +56,46 @@ SDL_Surface* fNewWindowSurface(SDL_Window *pWindowAdr, SDL_Surface *pSurfAdr, SD
     return pSurfAdr;
 }
 
+
 //Creating a surface from a BMP file (pointer is added in the surface table so we can free it automatically when game exits)
 SDL_Surface* fNewBMPSurface(SDL_Surface *pSurfAdr, const char *filePath, SDL_Surface* tpSurf[NB_MAX_SURF]) {
     pSurfAdr = NULL;
     pSurfAdr = SDL_LoadBMP(filePath);
     if(pSurfAdr==NULL) {
-        fprintf(stderr,"Erreur de création de surface : %s\n",SDL_GetError());
+        fprintf(stderr,"Couldn't create the surface from .bmp file : %s\n",SDL_GetError());
         system("pause");
         exit(EXIT_FAILURE);
     }
     addSurfToDelTable(pSurfAdr,tpSurf);
 
     return pSurfAdr;
+}
+
+//Creating a texture from a surface
+SDL_Texture* fNewTextureFromBMP(SDL_Renderer *pRenderer,const char *filePath) {
+    //Creating a temporary surface to load the file
+    SDL_Surface *pSurfTemp = NULL;
+    pSurfTemp = SDL_LoadBMP(filePath);
+    if(pSurfTemp==NULL) {
+        fprintf(stderr,"Couldn't create the surface from .bmp file : %s\n",SDL_GetError());
+        system("pause");
+        exit(EXIT_FAILURE);
+    }
+
+    //We load the surface onto the texture
+    SDL_Texture *pTexture = NULL;
+    pTexture = SDL_CreateTextureFromSurface(pRenderer,pSurfTemp);
+    if(pTexture==NULL) {
+        fprintf(stderr,"Couldn't create the texture from the surface : %s\n",SDL_GetError());
+        system("pause");
+        exit(EXIT_FAILURE);
+    }
+
+    //We don't need the surface anymore, let's kill it (with fire)
+    SDL_FreeSurface(pSurfTemp);
+
+    //We return the texture
+    return pTexture;
 }
 
 //Going through all surface pointers we've created so far, and freeing them (GOOD LUCK GUYS, HAVE FUN BEING FREE !!)
@@ -69,9 +109,11 @@ void fFreeAllSurfaces(SDL_Surface* tpSurf[NB_MAX_SURF]) {
     }
 }
 
+
 //Destroying the main window
-void fDestroyWindow(SDL_Window *pWindowAdr){
-    SDL_DestroyWindow(pWindowAdr);
+void fDestroyWindow(Window *pWindowStruct){
+    SDL_DestroyRenderer(pWindowStruct->pRenderer);
+    SDL_DestroyWindow(pWindowStruct->pWindow);
 }
 
 //Well, there was no need for that function, was it?...

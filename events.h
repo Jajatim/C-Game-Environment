@@ -4,6 +4,6 @@
 #include "defines.h"
 
 //int fEventManager(Keyboard *pKEYBOARD, SDL_Event *pEvent);
-int fEventManager(Keyboard *pKEYBOARD);
+int fEventManager(Keyboard *pKeyboard, Mouse *pMouse);
 
 #endif // EVENTS_H_INCLUDED

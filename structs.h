@@ -3,6 +3,11 @@
 
 #include "defines.h"
 
+struct Window {
+    SDL_Window *pWindow;
+    SDL_Renderer *pRenderer;
+};
+
 struct Keyboard {
     int ArrowUp;
     int ArrowDown;
@@ -17,12 +22,29 @@ struct Keyboard {
     //Keyboard mapping, feel free to add any key but make sure to add it in event.c as well (so it can be used)
 };
 
+struct Mouse {
+    int MouseX;
+    int MouseY;
+    int MouseLeftClic;
+    int MouseRightClic;
+    int MouseWheelUp;
+    int MouseWheelDown;
+};
+
+struct ObjBackground {
+    SDL_Texture *pBGTexture; //pointer towards background structure
+};
+
 struct ObjRect {
     float x; //x pos
     float y; //y pos
     float w; //width
     float h; //height
     float speed; //speed (in pixels per second)
+    Uint8 color_r; //Red colour
+    Uint8 color_g; //Green colour
+    Uint8 color_b; //Blue colour
+    Uint8 color_a; //Opacity (0 = transparent / 255 = fully opaque)
 };
 
 struct ObjAnim {
@@ -36,6 +58,7 @@ struct ObjAnim {
 };
 
 struct MasterObject {
+    ObjBackground allObjBackground[OBJBACKGROUND_MAX];
     ObjRect allObjRect[OBJRECT_MAX];
     ObjAnim allObjAnim[OBJANIM_MAX];
 };

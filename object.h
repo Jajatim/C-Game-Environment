@@ -3,12 +3,13 @@
 
 #include "defines.h"
 
-//Main creation - calls sub creations (should be called createMaster really... I'll get to that some day !)
-void initMaster(MasterObject *pMasterObject);
+//Main creation - calls sub creations
+void createMaster(MasterObject *pMasterObject);
 
-//Sub creations (should be called createXXXXXX really... I'll get to that some day !)
-void initObjRect(ObjRect allObjRect[OBJRECT_MAX]);
-void initObjAnim(ObjAnim allObjAnim[OBJANIM_MAX]);
+//Sub creations
+void createObjBackground(ObjBackground allObjBackground[OBJBACKGROUND_MAX]);
+void createObjRect(ObjRect allObjRect[OBJRECT_MAX]);
+void createObjAnim(ObjAnim allObjAnim[OBJANIM_MAX]);
 
 
 #endif // OBJECT_H_INCLUDED

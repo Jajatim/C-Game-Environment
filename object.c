@@ -1,11 +1,19 @@
 #include "includes.h"
 
-void initMaster(MasterObject *pMasterObject) {
-    initObjRect(pMasterObject->allObjRect);
-    initObjAnim(pMasterObject->allObjAnim);
+void createMaster(MasterObject *pMasterObject) {
+    createObjBackground(pMasterObject->allObjBackground);
+    createObjRect(pMasterObject->allObjRect);
+    createObjAnim(pMasterObject->allObjAnim);
 }
 
-void initObjRect(ObjRect allObjRect[OBJRECT_MAX]) {
+void createObjBackground(ObjBackground allObjBackground[OBJBACKGROUND_MAX]) {
+    int i;
+    for (i=0;i<OBJBACKGROUND_MAX;i++) {
+        allObjBackground[i].pBGTexture=NULL;
+    }
+}
+
+void createObjRect(ObjRect allObjRect[OBJRECT_MAX]) {
     int i;
     for (i=0;i<OBJRECT_MAX;i++) {
         allObjRect[i].x=0.0;
@@ -13,10 +21,14 @@ void initObjRect(ObjRect allObjRect[OBJRECT_MAX]) {
         allObjRect[i].w=0.0;
         allObjRect[i].h=0.0;
         allObjRect[i].speed=0.0;
+        allObjRect[i].color_r=255; //White by default
+        allObjRect[i].color_g=255; //White by default
+        allObjRect[i].color_b=255; //White by default
+        allObjRect[i].color_a=255; //Opaque by default
     }
 }
 
-void initObjAnim(ObjAnim allObjAnim[OBJANIM_MAX]) {
+void createObjAnim(ObjAnim allObjAnim[OBJANIM_MAX]) {
     int i;
     for (i=0;i<OBJANIM_MAX;i++) {
         allObjAnim[i].x=0.0;

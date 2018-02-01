@@ -4,10 +4,11 @@
 #include "defines.h"
 
 //Main render, calls others renders
-void gameRender(SDL_Window *pWindow,SDL_Surface *pWindowSurf,MasterObject *pMasterObject);
+void gameRender(Window *pWindowStruct,MasterObject *pMasterObject);
 
 //Sub renders
-void gameRenderRect(SDL_Window *pWindow,SDL_Surface *pWindowSurf,ObjRect allObjRect[OBJRECT_MAX]);
-void gameRenderAnim(SDL_Window *pWindow,SDL_Surface *pWindowSurf,ObjAnim allObjAnim[OBJANIM_MAX]);
+void gameRenderBackground(SDL_Renderer *pRenderer,ObjBackground allObjBackground[OBJBACKGROUND_MAX]);
+void gameRenderRect(SDL_Renderer *pRenderer,ObjRect allObjRect[OBJRECT_MAX]);
+void gameRenderAnim(SDL_Renderer *pRenderer,ObjAnim allObjAnim[OBJANIM_MAX]);
 
 #endif // GAMERENDER_H_INCLUDED
