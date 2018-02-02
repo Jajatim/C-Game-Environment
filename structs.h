@@ -32,7 +32,7 @@ struct Mouse {
 };
 
 struct ObjBackground {
-    SDL_Texture *pBGTexture; //pointer towards background structure
+    SDL_Texture *pBGTexture; //pointer towards background texture
 };
 
 struct ObjRect {
@@ -48,13 +48,26 @@ struct ObjRect {
 };
 
 struct ObjAnim {
-    float x; //x pos
-    float y; //y pos
-    float w; //width
-    float h; //height
+    //In game stuff
+    SDL_Rect inGamePos; //In game position - also collision box for now
     float speed; //speed (in pixels per second)
+    SDL_Texture *pTexture; //pointer towards sprite texture
+    SDL_Rect currentSpritePos; //current sprite rectangle. will change depending on animType and sprite dimensions.
 
-    //NOTE : same as ObjRect for testing purposes
+    //Animation handling stuff
+    int animType; //What is the object doing (example : idling, jumping, running, etc...) - Used to update the sprite position through the sprite sheet
+    int spriteWidth; //Width of the sprite - So we can go to the next sprite according to animType
+    int spriteHeight; //Height of the sprite - So we can go to the next sprite according to animType
+    int spriteCurrent; //Which sprite are we currently rendering
+    int spriteMax; //How many sprites are there here
+    int framesPerSprite; //How long do we render each sprite
+    int framesTimer; //How long do we render each sprite
+    Uint8 color_r; //Sprite background colour to be erased : Red amount
+    Uint8 color_g; //Sprite background colour to be erased : Green amount
+    Uint8 color_b; //Sprite background colour to be erased : Blue amount
+
+    //Note : This animation handling requires sprites to have the same size, and sheet to be carefully done.
+    //We can save the colour variables by having the same colour to be erased for every sprite in our game (and then hardcoding the unwanted colour)
 };
 
 struct MasterObject {

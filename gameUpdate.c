@@ -12,6 +12,8 @@ void gameUpdate(Uint32 deltatime,Keyboard *pKeyboard,Mouse *pMouse,MasterObject 
 
 void gameUpdateRect(Uint32 deltatime,Keyboard *pKeyboard,Mouse *pMouse,ObjRect allObjRect[OBJRECT_MAX]) {
 
+    /* THIS IS COMMENTED PONG LIKE STUFF.
+
     //TEMP - INITIALIZE DATA WHEN BALL IS OUTSIDE THE SCREEN
     if (allObjRect[OBJRECT_BALL].x<0 || allObjRect[OBJRECT_BALL].x>WINDOW_X) {
         gameInitRect(allObjRect);
@@ -53,21 +55,6 @@ void gameUpdateRect(Uint32 deltatime,Keyboard *pKeyboard,Mouse *pMouse,ObjRect a
     if (pKeyboard->ArrowRight==1) {
         allObjRect[OBJRECT_PAD_RIGHT].x += allObjRect[OBJRECT_PAD_RIGHT].speed*deltatime/1000;
     }
-
-    /*
-    //1 : right pad bis (mouse) - It works \o/
-    if (pMouse->MouseX >= allObjRect[OBJRECT_PAD_RIGHT].x) {
-        allObjRect[OBJRECT_PAD_RIGHT].x += allObjRect[OBJRECT_PAD_RIGHT].speed*deltatime/1000;
-    }
-    else {
-        allObjRect[OBJRECT_PAD_RIGHT].x -= allObjRect[OBJRECT_PAD_RIGHT].speed*deltatime/1000;
-    }
-    if (pMouse->MouseY >= allObjRect[OBJRECT_PAD_RIGHT].y) {
-        allObjRect[OBJRECT_PAD_RIGHT].y += allObjRect[OBJRECT_PAD_RIGHT].speed*deltatime/1000;
-    }
-    else {
-        allObjRect[OBJRECT_PAD_RIGHT].y -= allObjRect[OBJRECT_PAD_RIGHT].speed*deltatime/1000;
-    }*/
 
     //2 : ball
     static float dirX=1; //X axis coefficient, here the ball goes straight on the X axis
@@ -116,11 +103,71 @@ void gameUpdateRect(Uint32 deltatime,Keyboard *pKeyboard,Mouse *pMouse,ObjRect a
     //We move the ball, accordingly to the calculated coefficients and the speed
     allObjRect[OBJRECT_BALL].x += allObjRect[OBJRECT_BALL].speed*deltatime/1000 * dirX;
     allObjRect[OBJRECT_BALL].y += allObjRect[OBJRECT_BALL].speed*deltatime/1000 * dirY;
+
+    */
 }
 
 
 void gameUpdateAnim(Uint32 deltatime,Keyboard *pKeyboard,Mouse *pMouse,ObjAnim allObjAnim[OBJANIM_MAX]) {
-    //No update to do here yet
+
+    //0 : Yoshi -> animType : 1=idle_right 2=idle_left 3=move_right 4=move_left (need enumeration...)
+    //Updating the movement
+    if (pKeyboard->Keyq==1) {
+        if (allObjAnim[OBJANIM_MAINCHAR].animType!=4) { //If it wasn't already moving left
+            allObjAnim[OBJANIM_MAINCHAR].animType=4; //We update the animType
+            allObjAnim[OBJANIM_MAINCHAR].spriteCurrent = 1; //We reset the sprite sequence to the beginning
+            allObjAnim[OBJANIM_MAINCHAR].framesTimer = allObjAnim[OBJANIM_MAINCHAR].framesPerSprite; //We reset the timer
+        }
+        //allObjAnim[OBJANIM_MAINCHAR].inGamePos.x -= allObjAnim[OBJANIM_MAINCHAR].speed*deltatime/1000.0;
+        allObjAnim[OBJANIM_MAINCHAR].inGamePos.x -= (int)(allObjAnim[OBJANIM_MAINCHAR].speed*deltatime/1000.0);
+    }
+    if (pKeyboard->Keyd==1) {
+        if (allObjAnim[OBJANIM_MAINCHAR].animType!=3) { //If it wasn't already moving left
+            allObjAnim[OBJANIM_MAINCHAR].animType=3; //We update the animType
+            allObjAnim[OBJANIM_MAINCHAR].spriteCurrent = 1; //We reset the sprite sequence to the beginning
+            allObjAnim[OBJANIM_MAINCHAR].framesTimer = allObjAnim[OBJANIM_MAINCHAR].framesPerSprite; //We reset the timer
+        }
+        //allObjAnim[OBJANIM_MAINCHAR].inGamePos.x += allObjAnim[OBJANIM_MAINCHAR].speed*deltatime/1000.0;
+        allObjAnim[OBJANIM_MAINCHAR].inGamePos.x += (int)(allObjAnim[OBJANIM_MAINCHAR].speed*deltatime/1000.0);
+    }
+
+    //Updating the animation
+    //First we check if we just stopped (so we can go into idle mode)
+    switch (allObjAnim[OBJANIM_MAINCHAR].animType) {
+        case 3: //Moving right
+            if (pKeyboard->Keyd==0) { //we WERE moving right, but we stopped
+                allObjAnim[OBJANIM_MAINCHAR].animType=1; //We update the animType - now we're idling in the same direction
+                allObjAnim[OBJANIM_MAINCHAR].spriteCurrent = 1; //We reset the sprite sequence to the beginning
+                allObjAnim[OBJANIM_MAINCHAR].framesTimer = allObjAnim[OBJANIM_MAINCHAR].framesPerSprite; //We reset the timer
+            }
+            break;
+        case 4: //Moving left
+            if (pKeyboard->Keyq==0) { //we WERE moving left, but we stopped
+                allObjAnim[OBJANIM_MAINCHAR].animType=2; //We update the animType - now we're idling in the same direction
+                allObjAnim[OBJANIM_MAINCHAR].spriteCurrent = 1; //We reset the sprite sequence to the beginning
+                allObjAnim[OBJANIM_MAINCHAR].framesTimer = allObjAnim[OBJANIM_MAINCHAR].framesPerSprite; //We reset the timer
+            }
+            break;
+    }
+
+    //decreasing the timer to next sprite
+    allObjAnim[OBJANIM_MAINCHAR].framesTimer --;
+
+    //If the timer is over
+    if (allObjAnim[OBJANIM_MAINCHAR].framesTimer==0) {
+        allObjAnim[OBJANIM_MAINCHAR].framesTimer = allObjAnim[OBJANIM_MAINCHAR].framesPerSprite; //We reset the timer
+        allObjAnim[OBJANIM_MAINCHAR].spriteCurrent ++; //We go up in the animation sequence
+        //If the sequence is over
+        if (allObjAnim[OBJANIM_MAINCHAR].spriteCurrent>allObjAnim[OBJANIM_MAINCHAR].spriteMax) {
+            allObjAnim[OBJANIM_MAINCHAR].spriteCurrent=1;//We reset it
+        }
+    }
+
+    //We update the sprite position
+    allObjAnim[OBJANIM_MAINCHAR].currentSpritePos.x = allObjAnim[OBJANIM_MAINCHAR].spriteWidth*(allObjAnim[OBJANIM_MAINCHAR].spriteCurrent-1);
+    allObjAnim[OBJANIM_MAINCHAR].currentSpritePos.y = allObjAnim[OBJANIM_MAINCHAR].spriteHeight*(allObjAnim[OBJANIM_MAINCHAR].animType-1);
+    allObjAnim[OBJANIM_MAINCHAR].currentSpritePos.w = allObjAnim[OBJANIM_MAINCHAR].spriteWidth;
+    allObjAnim[OBJANIM_MAINCHAR].currentSpritePos.h = allObjAnim[OBJANIM_MAINCHAR].spriteHeight;
 }
 
 

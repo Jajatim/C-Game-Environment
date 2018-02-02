@@ -3,7 +3,7 @@
 void gameInit(Window *pWindowStruct,MasterObject *pMasterObject) {
     gameInitBackground(pWindowStruct->pRenderer,pMasterObject->allObjBackground);
     gameInitRect(pMasterObject->allObjRect);
-    gameInitAnim(pMasterObject->allObjAnim);
+    gameInitAnim(pWindowStruct->pRenderer,pMasterObject->allObjAnim);
 }
 
 
@@ -50,14 +50,33 @@ void gameInitRect(ObjRect allObjRect[OBJRECT_MAX]) {
 }
 
 
-void gameInitAnim(ObjAnim allObjAnim[OBJANIM_MAX]) {
+void gameInitAnim(SDL_Renderer *pRenderer,ObjAnim allObjAnim[OBJANIM_MAX]) {
     //See enumeration in "defines.h" for details
 
+    //Character appears in the centre of the screen
+    allObjAnim[OBJANIM_MAINCHAR].inGamePos.w = 30;
+    allObjAnim[OBJANIM_MAINCHAR].inGamePos.h = 50;
+    allObjAnim[OBJANIM_MAINCHAR].inGamePos.x = WINDOW_X/2-allObjAnim[OBJANIM_MAINCHAR].inGamePos.w/2;
+    allObjAnim[OBJANIM_MAINCHAR].inGamePos.y = WINDOW_Y/2-allObjAnim[OBJANIM_MAINCHAR].inGamePos.h/2;
+
+    allObjAnim[OBJANIM_MAINCHAR].currentSpritePos.x = 180;
+    allObjAnim[OBJANIM_MAINCHAR].currentSpritePos.y = 54;
+    allObjAnim[OBJANIM_MAINCHAR].currentSpritePos.w = 24;
+    allObjAnim[OBJANIM_MAINCHAR].currentSpritePos.h = 38;
+
+    allObjAnim[OBJANIM_MAINCHAR].speed = 300;
+    allObjAnim[OBJANIM_MAINCHAR].pTexture = fNewTextureFromBMP(pRenderer,"Stolen_Yoshi.bmp");
+
+    allObjAnim[OBJANIM_MAINCHAR].animType = 1; //Need enumeration, or we'll get lost later on... Here : 1=idle_right 2=idle_left 3=move_right 4=move_left
+    allObjAnim[OBJANIM_MAINCHAR].spriteWidth = 30;
+    allObjAnim[OBJANIM_MAINCHAR].spriteHeight = 40;
+    allObjAnim[OBJANIM_MAINCHAR].spriteCurrent = 1;
+
+    allObjAnim[OBJANIM_MAINCHAR].spriteMax = 6;
+    allObjAnim[OBJANIM_MAINCHAR].framesPerSprite = 25;
     /*
-    allObjAnim[OBJANIM_ONE].x = 0;
-    allObjAnim[OBJANIM_ONE].y = 0;
-    allObjAnim[OBJANIM_ONE].w = WINDOW_X;
-    allObjAnim[OBJANIM_ONE].h = WINDOW_Y;
-    allObjAnim[OBJANIM_ONE].speed = 0;
+    allObjAnim[OBJANIM_MAINCHAR].color_r = -1;
+    allObjAnim[OBJANIM_MAINCHAR].color_g = -1;
+    allObjAnim[OBJANIM_MAINCHAR].color_b = -1;
     */
 }

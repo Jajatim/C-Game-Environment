@@ -30,7 +30,7 @@ enum eObjRect {
 };
 
 enum eObjAnim {
-    OBJANIM_ONE, //Rename for something more appropriate...
+    OBJANIM_MAINCHAR, //Rename for something more appropriate...
 
     /* ADD NEW ANIMATED OBJECTS HERE */
 

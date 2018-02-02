@@ -29,17 +29,17 @@ void gameRender(Window *pWindowStruct,MasterObject *pMasterObject) {
 
 
 void gameRenderBackground(SDL_Renderer *pRenderer,ObjBackground allObjBackground[OBJBACKGROUND_MAX]){
-    int i;
+    /*int i;
     for (i=0;i<OBJBACKGROUND_MAX;i++) {
         if (allObjBackground[i].pBGTexture != NULL) {
             SDL_RenderCopy(pRenderer,allObjBackground[i].pBGTexture,NULL,NULL);
         }
-    }
+    }*/
 }
 
 
 void gameRenderRect(SDL_Renderer *pRenderer,ObjRect allObjRect[OBJRECT_MAX]) {
-    int i;
+    /*int i;
     SDL_Rect srcRect;
     for (i=0;i<OBJRECT_MAX;i++) {
         srcRect.x = allObjRect[i].x;
@@ -49,10 +49,15 @@ void gameRenderRect(SDL_Renderer *pRenderer,ObjRect allObjRect[OBJRECT_MAX]) {
 
         SDL_SetRenderDrawColor(pRenderer,allObjRect[i].color_r,allObjRect[i].color_g,allObjRect[i].color_b,allObjRect[i].color_a);
         SDL_RenderFillRect(pRenderer,&srcRect);
-    }
+    }*/
 }
 
 
 void gameRenderAnim(SDL_Renderer *pRenderer,ObjAnim allObjAnim[OBJANIM_MAX]) {
-
+    int i;
+    for (i=0;i<OBJANIM_MAX;i++) {
+        if (allObjAnim[i].pTexture != NULL) {
+            SDL_RenderCopy(pRenderer,allObjAnim[i].pTexture,&allObjAnim[i].currentSpritePos,&allObjAnim[i].inGamePos);
+        }
+    }
 }
