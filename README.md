@@ -39,6 +39,6 @@ What's to come ?
 - Added new function to load a texture from a BMP file.
 - Fixed all render with new use of renderers
 - Added mouse input (except wheel, double click, and maybe other stuff i didn't think of).
-- Fixed the event manager : now in a while instead of a if
+- Fixed the event manager : now in a while instead of a if (credits to 'picosoft' from "openclassrooms.com")
 - Deleted some functions to handle surfaces (as it's not needed anymore, some are kept while finishing the update)
 - Other stuff I can't remember...
