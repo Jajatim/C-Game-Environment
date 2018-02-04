@@ -2,8 +2,89 @@
 
 void gameUpdate(Uint32 deltatime,Keyboard *pKeyboard,Mouse *pMouse,MasterObject *pMasterObject) {
     //void gameUpdateBackground(); //Normally, doesn't need updating. Uncomment if needed
+    gameUpdateMainChar(deltatime,pKeyboard,pMouse,pMasterObject->pMainChar,pMasterObject);
     gameUpdateRect(deltatime,pKeyboard,pMouse,pMasterObject->allObjRect);
     gameUpdateAnim(deltatime,pKeyboard,pMouse,pMasterObject->allObjAnim);
+}
+
+
+void gameUpdateMainChar(Uint32 deltatime,Keyboard *pKeyboard,Mouse *pMouse,MainChar *pMainChar,MasterObject *pMasterObject) {
+
+    float movement = pMainChar->speed*deltatime/1000.0;
+
+    //0 : Yoshi -> animType : 1=idle_right 2=idle_left 3=move_right 4=move_left (need enumeration...)
+    //Updating the movement
+    if (pKeyboard->Keyq==1) {
+        if (pMainChar->animType!=4) { //If it wasn't already moving left
+            pMainChar->animType=4; //We update the animType
+            pMainChar->spriteCurrent = 1; //We reset the sprite sequence to the beginning
+            pMainChar->framesTimer = pMainChar->framesPerSprite; //We reset the timer
+        }
+        //pMainChar->inGamePosX -= pMainChar->speed*deltatime/1000.0;
+        pMainChar->inGamePosX -= movement;
+        pMasterObject->camX -= movement;
+    }
+    if (pKeyboard->Keyd==1) {
+        if (pMainChar->animType!=3) { //If it wasn't already moving left
+            pMainChar->animType=3; //We update the animType
+            pMainChar->spriteCurrent = 1; //We reset the sprite sequence to the beginning
+            pMainChar->framesTimer = pMainChar->framesPerSprite; //We reset the timer
+        }
+        //pMainChar->inGamePosX += pMainChar->speed*deltatime/1000.0;
+        pMainChar->inGamePosX += movement;
+        pMasterObject->camX += movement;
+    }
+    if (pKeyboard->Keyz==1) {
+        //To animate !
+        //pMainChar->inGamePosY -= pMainChar->speed*deltatime/1000.0;
+        pMainChar->inGamePosY -= movement;
+        pMasterObject->camY -= movement;
+    }
+    if (pKeyboard->Keys==1) {
+        //To animate !
+        //pMainChar->inGamePosY += pMainChar->speed*deltatime/1000.0;
+        pMainChar->inGamePosY += movement;
+        pMasterObject->camY += movement;
+    }
+
+    //Updating the animation
+    //First we check if we just stopped (so we can go into idle mode)
+    switch (pMainChar->animType) {
+        case 3: //Moving right
+            if (pKeyboard->Keyd==0) { //we WERE moving right, but we stopped
+                pMainChar->animType=1; //We update the animType - now we're idling in the same direction
+                pMainChar->spriteCurrent = 1; //We reset the sprite sequence to the beginning
+                pMainChar->framesTimer = pMainChar->framesPerSprite; //We reset the timer
+            }
+            break;
+        case 4: //Moving left
+            if (pKeyboard->Keyq==0) { //we WERE moving left, but we stopped
+                pMainChar->animType=2; //We update the animType - now we're idling in the same direction
+                pMainChar->spriteCurrent = 1; //We reset the sprite sequence to the beginning
+                pMainChar->framesTimer = pMainChar->framesPerSprite; //We reset the timer
+            }
+            break;
+    }
+
+    //decreasing the timer to next sprite
+    pMainChar->framesTimer --;
+
+    //If the timer is over
+    if (pMainChar->framesTimer==0) {
+        pMainChar->framesTimer = pMainChar->framesPerSprite; //We reset the timer
+        pMainChar->spriteCurrent ++; //We go up in the animation sequence
+        //If the sequence is over
+        if (pMainChar->spriteCurrent>pMainChar->spriteMax) {
+            pMainChar->spriteCurrent=1;//We reset it
+        }
+    }
+
+    //We update the sprite position in the sprite sheet
+    pMainChar->spritePos.x = pMainChar->spriteWidth*(pMainChar->spriteCurrent-1);
+    pMainChar->spritePos.y = pMainChar->spriteHeight*(pMainChar->animType-1);
+    //Width & Height do not change in this system
+    //pMainChar->spritePos.w =
+    //pMainChar->spritePos.h =
 }
 
 

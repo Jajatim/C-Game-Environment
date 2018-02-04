@@ -26,21 +26,32 @@ int main(int argc, char** argv)
     Uint32 deltaTime = 0.0; //for timer handling
 
     //Creating the keyboard structure
-    Keyboard aKeyboard = {0};
-    Keyboard *pKeyboard = &aKeyboard;
+    Keyboard keyboard = {0};
+    Keyboard *pKeyboard = &keyboard;
 
     //Creating the mouse structure
-    Mouse aMouse = {0};
-    Mouse *pMouse = &aMouse;
+    Mouse mouse = {0};
+    Mouse *pMouse = &mouse;
 
     //Creating the MasterObject (which contains a table of every other object)
-    MasterObject aMasterObject;
-    MasterObject *pMasterObject = &aMasterObject;
+    MasterObject masterObject;
+    MasterObject *pMasterObject = &masterObject;
+    MainChar mainChar;
+    pMasterObject->pMainChar = &mainChar;
     createMaster(pMasterObject);
 
     //Creating the timers - Initialized at the wanted value so the first loop will do the actions it's supposed to.
     Uint32 renderTimer=RENDER_TIMER;
     Uint32 updateTimer=UPDATE_TIMER;
+
+    //Creating the map
+    MapGlobal mapGlobal;
+    MapGlobal *pMapGlobal=&mapGlobal;
+    MapCurrent mapCurrent;
+    MapCurrent *pMapCurrent=&mapCurrent;
+    MapChunk mapChunk;
+    MapChunk *pMapChunk = &mapChunk;
+    createMapGlobal(pWindowStruct->pRenderer,pMapCurrent,pMapGlobal,pMapChunk);
 
 
 
@@ -72,7 +83,7 @@ int main(int argc, char** argv)
         //RENDER HANDLING
         renderTimer += deltaTime;
         if (renderTimer>=RENDER_TIMER) {
-            gameRender(pWindowStruct,pMasterObject);
+            gameRender(pWindowStruct,pMasterObject,pMapCurrent);
             renderTimer=0;
         }
         SDL_Delay(1); // OR -> //_sleep(1);

@@ -1,16 +1,17 @@
 #include "includes.h"
 
-
-// NEED REWORK TO WORK WITH RENDERERS !
-
-void gameRender(Window *pWindowStruct,MasterObject *pMasterObject) {
+void gameRender(Window *pWindowStruct,MasterObject *pMasterObject,MapCurrent *pMapCurrent) {
 
     //Screen erase (well, covers it in black...)
-    SDL_SetRenderDrawColor(pWindowStruct->pRenderer,0,0,0,255);
+    SDL_SetRenderDrawColor(pWindowStruct->pRenderer,200,200,200,255);
     SDL_RenderClear(pWindowStruct->pRenderer);
+
+    //Rendering the map
+    gameRenderMap(pWindowStruct->pRenderer,pMapCurrent,pMasterObject);
 
     //Calls sub renders
     gameRenderBackground(pWindowStruct->pRenderer,pMasterObject->allObjBackground);
+    gameRenderMainChar(pWindowStruct->pRenderer,pMasterObject->pMainChar,pMasterObject);
     gameRenderRect(pWindowStruct->pRenderer,pMasterObject->allObjRect);
     gameRenderAnim(pWindowStruct->pRenderer,pMasterObject->allObjAnim);
 
@@ -28,6 +29,22 @@ void gameRender(Window *pWindowStruct,MasterObject *pMasterObject) {
 }
 
 
+void gameRenderMap(SDL_Renderer *pRenderer,MapCurrent *pMapCurrent,MasterObject *pMasterObject) {
+    int i,j;
+    for (i=0;i<3;i++) {
+        for (j=0;j<3;j++) {
+            SDL_Rect rectDST;
+            rectDST.x = pMapCurrent->tableCurrentChunks[i][j].chunkPos.x - pMasterObject->camX;
+            rectDST.y = pMapCurrent->tableCurrentChunks[i][j].chunkPos.y - pMasterObject->camY;
+            rectDST.w = CHUNK_SIZE_W;
+            rectDST.h = CHUNK_SIZE_H;
+
+            SDL_RenderCopy(pRenderer,pMapCurrent->tableCurrentChunks[i][j].pChunkTexture,NULL,&rectDST);
+        }
+    }
+}
+
+
 void gameRenderBackground(SDL_Renderer *pRenderer,ObjBackground allObjBackground[OBJBACKGROUND_MAX]){
     /*int i;
     for (i=0;i<OBJBACKGROUND_MAX;i++) {
@@ -35,6 +52,21 @@ void gameRenderBackground(SDL_Renderer *pRenderer,ObjBackground allObjBackground
             SDL_RenderCopy(pRenderer,allObjBackground[i].pBGTexture,NULL,NULL);
         }
     }*/
+}
+
+
+void gameRenderMainChar(SDL_Renderer *pRenderer,MainChar *pMainChar,MasterObject *pMasterObject){
+    if (pMainChar->pTexture != NULL) {
+
+        //Where to render our character on screen
+        SDL_Rect rectDST;
+        rectDST.x = pMainChar->inGamePosX - pMasterObject->camX;
+        rectDST.y = pMainChar->inGamePosY - pMasterObject->camY;
+        rectDST.w = pMainChar->spritePos.w*4; //4 times the sprite width, because why not
+        rectDST.h = pMainChar->spritePos.h*4; //4 times the sprite height, because why not
+
+        SDL_RenderCopy(pRenderer,pMainChar->pTexture,&pMainChar->spritePos,&rectDST);
+    }
 }
 
 
@@ -54,10 +86,10 @@ void gameRenderRect(SDL_Renderer *pRenderer,ObjRect allObjRect[OBJRECT_MAX]) {
 
 
 void gameRenderAnim(SDL_Renderer *pRenderer,ObjAnim allObjAnim[OBJANIM_MAX]) {
-    int i;
+    /*int i;
     for (i=0;i<OBJANIM_MAX;i++) {
         if (allObjAnim[i].pTexture != NULL) {
             SDL_RenderCopy(pRenderer,allObjAnim[i].pTexture,&allObjAnim[i].currentSpritePos,&allObjAnim[i].inGamePos);
         }
-    }
+    }*/
 }

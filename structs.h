@@ -31,6 +31,32 @@ struct Mouse {
     int MouseWheelDown;
 };
 
+struct MainChar {
+    //In game stuff
+    float inGamePosX; //Float, so it stills moves when travelled distance is something like 0.02 pixels.
+    float inGamePosY; //Float, so it stills moves when travelled distance is something like 0.02 pixels.
+    //How to handle inGame width and height ? For now, it is defined in the render
+
+    float speed; //speed (in pixels per second)
+    SDL_Texture *pTexture; //pointer towards sprite texture
+    SDL_Rect spritePos; //Sprite rectangle in the sprite sheet
+
+    //Animation handling stuff
+    int animType; //What is the object doing (example : idling, jumping, running, etc...) - Used to update the sprite position through the sprite sheet
+    int spriteWidth; //Width of the sprite - So we can go to the next sprite according to animType
+    int spriteHeight; //Height of the sprite - So we can go to the next sprite according to animType
+    int spriteCurrent; //Which sprite are we currently rendering
+    int spriteMax; //How many sprites are there here
+    int framesPerSprite; //How long do we render each sprite - Careful, it depends on the updates or render timers set in defines.h
+    int framesTimer; //How long do we render each sprite
+    Uint8 color_r; //Sprite background colour to be erased : Red amount
+    Uint8 color_g; //Sprite background colour to be erased : Green amount
+    Uint8 color_b; //Sprite background colour to be erased : Blue amount
+
+    //Note : This animation handling requires sprites to have the same size, and sheet to be carefully done.
+    //We can save the colour variables by having the same colour to be erased for every sprite in our game (and then hardcoding the unwanted colour)
+};
+
 struct ObjBackground {
     SDL_Texture *pBGTexture; //pointer towards background texture
 };
@@ -60,7 +86,7 @@ struct ObjAnim {
     int spriteHeight; //Height of the sprite - So we can go to the next sprite according to animType
     int spriteCurrent; //Which sprite are we currently rendering
     int spriteMax; //How many sprites are there here
-    int framesPerSprite; //How long do we render each sprite
+    int framesPerSprite; //How long do we render each sprite - Careful, it depends on the updates or render timers set in defines.h
     int framesTimer; //How long do we render each sprite
     Uint8 color_r; //Sprite background colour to be erased : Red amount
     Uint8 color_g; //Sprite background colour to be erased : Green amount
@@ -71,39 +97,50 @@ struct ObjAnim {
 };
 
 struct MasterObject {
+    float camX; //camera position on X
+    float camY; //camera position on Y
+    MainChar *pMainChar;
     ObjBackground allObjBackground[OBJBACKGROUND_MAX];
     ObjRect allObjRect[OBJRECT_MAX];
     ObjAnim allObjAnim[OBJANIM_MAX];
 };
 
 
-//NOTE : below are ideas for an animated object. Unused for now.
-/*struct anObject {
-    //Elements de gestion macro
-    int isDead; //0 ou 1 - Raccourci pour savoir si on le traite ou pas du tout
-    int isMovable; //0 ou 1 - Il peut bouger ?
-    int isRenderable; //0 ou 1 - Il faut le render ou pas ?
-    int isCollisionable; //0 ou 1 - Il collisionne ou pas ?
-    unsigned int type; //type de l'objet. A gérer avec des #define (ex : OBJECT_CIRCLE, OBJECT_ENNEMY, OBJECT_RECT, etc...) ; permet une gestion fine
 
-    //Elements de gestion micro
-    int x; //position en x
-    int y; //position en y
-    int w; //taille en largeur (si cercle : rayon)
-    int h; //taille en hauteur
-    int speed; //vitesse (en pixels par secondes)
-    SDL_Surface *pSpriteSheet; //Adresse de la surface chargée avec la fiche de sprites
-    int nbAnimations; //Nombre d'animations différentes
-    int maxFramesPerAnim; //Nombre max de frames par animation
 
-    int tableAnimations;
 
-    //const int tableAnimations[nbAnimations][maxFramesPerAnim]; //matrice des animations
 
-    //Idées à rajouter :
-    // - Collision box/circle/autre?
-};*/
 
+
+// LET'S CREATE AN INFINITE MAP !! (don't worry, this chirpy optimism will fade soon :D)
+
+//Let's try this method :
+// - We create chunks (empty for now).
+// - These chunks will be found (and named) by their position. For example : Starting chunk is X0/Y0, right chunk is X+ChunkWidth/Y0
+// - We keep in memory and update only the chunks around the camera (let's say a 3*3 grid, that's 9 chunks)
+// - For now, we add all new chunks in a "mapGlobal" structure, which contains all the chunks created so far (malloc it up \o/)
+// - Later on, we'll need to dump this structure into a file cause it's useless data
+
+struct MapChunk {
+    SDL_Rect chunkPos; //Contains the position of the chunk
+
+    //Included for testing purposes : To be updated.
+    int chunkType; //Type of the chunk, so we can load the right texture on it and check if what we're doing is working properly
+    SDL_Texture *pChunkTexture; //pointer towards background texture
+
+    //Later, we'll divide each chunk in a tile grid so we can save objects and other stuff.
+};
+
+//Current chunks in memory (the part of the map that we update/render)
+//For now, we only load 9 chunks in this structure, this might need to be upgraded to 25 chunks ? Or divided in chunks to update and chunks to render? We'll see
+struct MapCurrent {
+    MapChunk tableCurrentChunks[3][3]; //If we are in chunk O/0, this table will contain chunks from X-ChunkWidth to X+ChunkWidth and Y-ChunkHeight to Y+ChunkWidth
+};
+
+//Contains the whole map. Temporary, we should update this system to load and unload the mapCurrent from a file, so this structure won't be too big.
+struct MapGlobal {
+    MapChunk tableAllChunks[3][3]; //Memory needs to be allocated dynamically to store newly created chunks. Starts at 9 though as we start our world with only 9 chunks.
+};
 
 
 #endif // STRUCTS_H_INCLUDED

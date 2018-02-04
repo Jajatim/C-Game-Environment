@@ -8,6 +8,7 @@ void gameUpdate(Uint32 deltatime,Keyboard *pKeyboard,Mouse *pMouse,MasterObject 
 
 //Sub updates
 //void gameUpdateBackground(); //Normally, doesn't need updating. Uncomment if needed
+void gameUpdateMainChar(Uint32 deltatime,Keyboard *pKeyboard,Mouse *pMouse,MainChar *pMainChar,MasterObject *pMasterObject);
 void gameUpdateRect(Uint32 deltatime,Keyboard *pKeyboard,Mouse *pMouse,ObjRect allObjRect[OBJRECT_MAX]);
 void gameUpdateAnim(Uint32 deltatime,Keyboard *pKeyboard,Mouse *pMouse,ObjAnim allObjAnim[OBJANIM_MAX]);
 

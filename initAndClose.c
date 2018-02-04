@@ -84,6 +84,7 @@ SDL_Texture* fNewTextureFromBMP(SDL_Renderer *pRenderer,const char *filePath) {
 
     //We load the surface onto the texture
     SDL_Texture *pTexture = NULL;
+    SDL_SetColorKey(pSurfTemp, SDL_TRUE,SDL_MapRGB( pSurfTemp->format, 255, 0, 255));
     pTexture = SDL_CreateTextureFromSurface(pRenderer,pSurfTemp);
     if(pTexture==NULL) {
         fprintf(stderr,"Couldn't create the texture from the surface : %s\n",SDL_GetError());

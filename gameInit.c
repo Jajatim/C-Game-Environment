@@ -1,14 +1,49 @@
 #include "includes.h"
 
 void gameInit(Window *pWindowStruct,MasterObject *pMasterObject) {
+    //Camera initialization
+    pMasterObject->camX = 0;
+    pMasterObject->camY = 0;
+
     gameInitBackground(pWindowStruct->pRenderer,pMasterObject->allObjBackground);
+    gameInitMainChar(pWindowStruct->pRenderer,pMasterObject->pMainChar);
     gameInitRect(pMasterObject->allObjRect);
     gameInitAnim(pWindowStruct->pRenderer,pMasterObject->allObjAnim);
 }
 
 
+void gameInitMainChar(SDL_Renderer *pRenderer,MainChar *pMainChar) {
+    //Top Left position of the main char is in the centre of the main chunk (chunk 0/0)
+    pMainChar->inGamePosX=WINDOW_X/2-60; //We should substract the sprite width
+    pMainChar->inGamePosY=WINDOW_Y/2-80; //We should substract the sprite height
+    pMainChar->speed=300.0;
+    pMainChar->pTexture=fNewTextureFromBMP(pRenderer,"Stolen_Yoshi.bmp"); //Replace file with a bmp file of yours
+
+    //Sprite position is handled in the update. Sprite width and height never change in my system
+    pMainChar->spritePos.x=0;
+    pMainChar->spritePos.y=0;
+    pMainChar->spritePos.w=30;
+    pMainChar->spritePos.h=40;
+
+    pMainChar->animType = 1; //Need enumeration, or we'll get lost later on... Here : 1=idle_right 2=idle_left 3=move_right 4=move_left
+    pMainChar->spriteWidth = 30;
+    pMainChar->spriteHeight = 40;
+    pMainChar->spriteCurrent = 1;
+
+    pMainChar->spriteMax = 6;
+    pMainChar->framesPerSprite = 25;
+
+    /*
+    //Need to pass these parameters to the texture creation function (a few lines up from here) because transparency is handled on the surface, not the texture
+    pMainChar->color_r = 255;
+    pMainChar->color_g = 0;
+    pMainChar->color_b = 255;
+    */
+}
+
+
 void gameInitBackground(SDL_Renderer *pRenderer,ObjBackground allObjBackground[OBJBACKGROUND_MAX]){
-    //allObjBackground[OBJBACKGROUND_MAIN].pBGTexture = fNewTextureFromBMP(pRenderer,"aaa.bmp"); //Replace "aaa.bmp" with a bmp file of yours
+    allObjBackground[OBJBACKGROUND_MAIN].pBGTexture = fNewTextureFromBMP(pRenderer,"aaa.bmp"); //Replace "aaa.bmp" with a bmp file of yours
 }
 
 
@@ -54,10 +89,10 @@ void gameInitAnim(SDL_Renderer *pRenderer,ObjAnim allObjAnim[OBJANIM_MAX]) {
     //See enumeration in "defines.h" for details
 
     //Character appears in the centre of the screen
-    allObjAnim[OBJANIM_MAINCHAR].inGamePos.w = 30;
-    allObjAnim[OBJANIM_MAINCHAR].inGamePos.h = 50;
+    allObjAnim[OBJANIM_MAINCHAR].inGamePos.w = 150;
+    allObjAnim[OBJANIM_MAINCHAR].inGamePos.h = 200;
     allObjAnim[OBJANIM_MAINCHAR].inGamePos.x = WINDOW_X/2-allObjAnim[OBJANIM_MAINCHAR].inGamePos.w/2;
-    allObjAnim[OBJANIM_MAINCHAR].inGamePos.y = WINDOW_Y/2-allObjAnim[OBJANIM_MAINCHAR].inGamePos.h/2;
+    allObjAnim[OBJANIM_MAINCHAR].inGamePos.y = WINDOW_Y-250;
 
     allObjAnim[OBJANIM_MAINCHAR].currentSpritePos.x = 180;
     allObjAnim[OBJANIM_MAINCHAR].currentSpritePos.y = 54;
@@ -74,9 +109,11 @@ void gameInitAnim(SDL_Renderer *pRenderer,ObjAnim allObjAnim[OBJANIM_MAX]) {
 
     allObjAnim[OBJANIM_MAINCHAR].spriteMax = 6;
     allObjAnim[OBJANIM_MAINCHAR].framesPerSprite = 25;
+
     /*
-    allObjAnim[OBJANIM_MAINCHAR].color_r = -1;
-    allObjAnim[OBJANIM_MAINCHAR].color_g = -1;
-    allObjAnim[OBJANIM_MAINCHAR].color_b = -1;
+    //Need to pass these parameters to the texture creation function (a few lines up from here) because transparency is handled on the surface, not the texture
+    allObjAnim[OBJANIM_MAINCHAR].color_r = 255;
+    allObjAnim[OBJANIM_MAINCHAR].color_g = 0;
+    allObjAnim[OBJANIM_MAINCHAR].color_b = 255;
     */
 }
