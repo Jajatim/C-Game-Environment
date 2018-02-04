@@ -1,6 +1,10 @@
 # C-Game-Environment
 Basic environment for games, coded in C
 
+*04/02/2018 - Map generation, and camera lock on character. Next on the list, chunk generation and handling. \o/*
+
+*03/02/2018 - Did absolutely nothing, must be the saturday night fever... \o/*
+
 *02/02/2018 - Fiddling around with animations. Hard to work with them, but now possible \o/*
 
 *01/02/2018 - Big update \o/ (mainly : textures, mouse input and maintenance, see bottom of this readme for the list)*
